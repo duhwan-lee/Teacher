@@ -9,7 +9,12 @@
 import UIKit
 
 class Tc06AnswerVideoViewController: UIViewController {
-
+    var question_num : String?
+    var answer_num : String?
+    
+    @IBAction func cancelAction(_ sender: Any) {
+    self.dismiss(animated: true, completion: nil)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 

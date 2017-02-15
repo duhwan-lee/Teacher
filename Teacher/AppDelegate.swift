@@ -48,7 +48,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             self.window?.makeKeyAndVisible()
             //performSegue(withIdentifier: "auth_segue", sender: nil)
         }
-
+        UITabBar.appearance().tintColor = UIColor(red: 0.37, green: 0.21, blue: 0.69, alpha: 1)
+        UINavigationBar.appearance().barTintColor = UIColor(red: 0.37, green: 0.21, blue: 0.69, alpha: 1)
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        
         return true
     }
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {

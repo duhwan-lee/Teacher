@@ -69,6 +69,7 @@
 		8784FA6F1E49BB7000C3929E /* Tc01categoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc01categoryViewController.swift; sourceTree = "<group>"; };
 		8784FA711E49C2E100C3929E /* Tc05ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc05ContentViewController.swift; sourceTree = "<group>"; };
 		8784FA731E49F50A00C3929E /* Tc02extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc02extension.swift; sourceTree = "<group>"; };
+		87ECF7A81E54261400A9D664 /* cit02a167qh.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cit02a167qh.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +114,7 @@
 		8718C1DE1E4C5018007AB054 /* SupporFile */ = {
 			isa = PBXGroup;
 			children = (
+				87ECF7A81E54261400A9D664 /* cit02a167qh.ttf */,
 				875F2B751E480CF800FE958F /* Info.plist */,
 				875F2B7B1E480E7700FE958F /* GoogleService-Info.plist */,
 				875F2B721E480CF800FE958F /* LaunchScreen.storyboard */,

@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet var mainView: UIView!
     @IBOutlet weak var search: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
@@ -18,6 +19,11 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        
+        tableView.backgroundColor = UIColor.clear
+        search.barTintColor = UIColor(red: 0.58, green: 0.46, blue: 0.80, alpha: 1)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,9 +62,17 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "tc01_cell", for: indexPath)
-        cell.textLabel?.text = question[indexPath.row].questionText
-        cell.detailTextLabel?.text = String(describing: question[indexPath.row].answerCount)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tc01_cell", for: indexPath) as! Tc01TableViewCell
+        cell.QuestionTextLabel.text = question[indexPath.row].questionText
+        cell.backgroundColor = UIColor.clear
+        
+        
+        cell.shadowView.layer.shadowColor = UIColor.gray.cgColor
+        cell.shadowView.layer.shadowOpacity = 8
+        cell.shadowView.layer.shadowRadius = 3
+        cell.shadowView.layer.shadowOffset = CGSize(width: 1, height: 1)
+        
+        
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

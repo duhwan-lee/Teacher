@@ -71,8 +71,6 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         self.writerName.text = writer_Name
-        
-        
     }
     
     

@@ -104,14 +104,14 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.locationManager.stopUpdatingLocation()
-        if let lastLocation = locations.last {
-            if self.canSendLocation {
-                let coordinate = String(lastLocation.coordinate.latitude) + ":" + String(lastLocation.coordinate.longitude)
-        
-                self.canSendLocation = false
-            }
-        }
+//        self.locationManager.stopUpdatingLocation()
+//        if let lastLocation = locations.last {
+//            if self.canSendLocation {
+//                let coordinate = String(lastLocation.coordinate.latitude) + ":" + String(lastLocation.coordinate.longitude)
+//        
+//                self.canSendLocation = false
+//            }
+//        }
     }
 
     //MARK: Methods
@@ -126,7 +126,7 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     
     //Downloads messages
     func fetchData() {
-        if let uid = FIRAuth.auth()?.currentUser?.uid {
+        if (FIRAuth.auth()?.currentUser?.uid) != nil {
             let ref = FIRDatabase.database().reference().child("message").child(channel!)
             ref.observe(.childAdded, with: { (FIRDataSnapshot) in
                 if let dictionary = FIRDataSnapshot.value as? [String : Any]{
@@ -135,7 +135,6 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
                     msg.time = dictionary[self.sv.time] as? Int
                     msg.toUid = dictionary[self.sv.toUid] as? String
                     msg.fromUiD = dictionary[self.sv.fromUid] as? String
-                    print(msg.text)
                     self.message.append(msg)
                     self.tableView.reloadData()
                 }

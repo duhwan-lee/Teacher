@@ -42,6 +42,7 @@ class Channel : NSObject {
 class Answer : NSObject {
     var text : String?
     var type : String?
+    var url : String?
 }
 class sendValue {
     let text = "text"

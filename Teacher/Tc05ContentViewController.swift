@@ -19,6 +19,7 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     var ansArr = [String]()
     var typeArr = [String]()
     var keyArr = [String]()
+    var answers = [Answer]()
     @IBOutlet weak var questionPic: UIImageView!
     @IBOutlet weak var qeustionText: UILabel!
     @IBOutlet weak var writerName: UILabel!
@@ -48,7 +49,12 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
                     for answer in ans.values {
                         let ansValue = answer as! [String : Any]
                         self.ansArr.append(ansValue["text"] as! String)
-                        self.typeArr.append(ansValue["type"] as! String)
+                        let answer_temp = Answer()
+                        answer_temp.type = (ansValue["type"] as! String)
+                        answer_temp.url = (ansValue["content"] as! String)
+                        answer_temp.text = (ansValue["text"] as! String)
+                        self.answers.append(answer_temp)
+                        //self.typeArr.append(ansValue["type"] as! String)
                     }
                     self.sections = [Section(count : ans.count, items : self.ansArr)]
                     self.tableview.reloadData()
@@ -102,7 +108,7 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = sections[indexPath.section].items[indexPath.row]
-        print(typeArr[indexPath.row])
+        //print(typeArr[indexPath.row])
         return cell
     }
     func toggleSection(_ header: CollapsibleTableViewHeader, section: Int) {
@@ -120,12 +126,10 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
         tableview.endUpdates()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if typeArr[indexPath.row]=="video"{
-        performSegue(withIdentifier: "tc06video_segue", sender: keyArr[indexPath.row])
-        }else if typeArr[indexPath.row]=="photo" {
-            
-        }else {
-            
+        if answers[indexPath.row].type=="video"{
+        performSegue(withIdentifier: "tc06video_segue", sender: indexPath.row)
+        }else{
+        performSegue(withIdentifier: "tc06photo_segue", sender: indexPath.row)
         }
         
     }
@@ -139,10 +143,21 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
         
         if segue.identifier == "tc06video_segue"{
             let videoVC = segue.destination as! Tc06AnswerVideoViewController
-            let ans_num = sender as! String
-            videoVC.answer_num = ans_num
+            let idx = sender as! Int
+            videoVC.answer_num = keyArr[idx]
             videoVC.question_num = content_Number
+            videoVC.url = answers[idx].url
+            videoVC.text = answers[idx].text
         }
-            
+        
+        if segue.identifier == "tc06photo_segue"{
+            let photoVC = segue.destination as! Tc06AnswerPhotoViewController
+            let idx = sender as! Int
+            photoVC.answer_num = keyArr[idx]
+            photoVC.question_num = content_Number
+            photoVC.url = answers[idx].url
+            photoVC.text = answers[idx].text
+            photoVC.type = answers[idx].type
+        }
     }
 }

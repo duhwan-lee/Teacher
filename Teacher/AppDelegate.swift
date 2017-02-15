@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         //try! FIRAuth.auth()!.signOut()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let user = FIRAuth.auth()?.currentUser {
+        if (FIRAuth.auth()?.currentUser) != nil {
 
             let initialViewController = storyboard.instantiateViewController(withIdentifier: "tabView")
             

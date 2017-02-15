@@ -35,7 +35,7 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
             user_ref.observe(.value, with: { (userSnapshot) in
                 if let userdic = userSnapshot.value as? [String : Any]{
                     let name = userdic["name"] as? String
-                    let image = userdic["profileImge"] as? String
+                    //let image = userdic["profileImge"] as? String
                     self.chArr[indexPath.row].name = name
                     cell.textLabel?.text = name
                 }

@@ -25,6 +25,7 @@ RPPreviewViewControllerDelegate {
     var imageFlag = false
     var drawFlag = false
     let recorder = RPScreenRecorder.shared()
+    let writer = (FIRAuth.auth()?.currentUser?.uid)! as String
 
     @IBOutlet weak var ImagecontainView: UIView!
     @IBOutlet weak var drawview: TouchDrawView!
@@ -53,8 +54,8 @@ RPPreviewViewControllerDelegate {
             })
             let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
                 let timestamp = Int(NSDate().timeIntervalSince1970)
-                let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
-                let value = ["text" : self.answer_tex, "type" : "text", "content" : "null", "writer" : FIRAuth.auth()?.currentUser?.uid, "time" : timestamp] as [String : Any]
+                let ref = FIRDatabase.database().reference().child("Question").child(self.content_Number!).child("answer").childByAutoId()
+                let value = ["text" : self.answer_tex, "type" : "text", "content" : "null", "writer" : self.writer, "time" : timestamp] as [String : Any]
                 ref.updateChildValues(value)
                 self.dismiss(animated: true, completion: nil)
             }
@@ -82,12 +83,12 @@ RPPreviewViewControllerDelegate {
                     storage.put(uploadImage, metadata: nil, completion: { (metadata, error) in
                         
                         if error != nil {
-                            print(error)
+                            print(error ?? "Error")
                             return
                         }else{
                             if let downUrl = metadata?.downloadURL()?.absoluteString{
                                 let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
-                                let value = ["text" : self.answer_tex, "type" : "photo", "content" : downUrl, "writer" : FIRAuth.auth()?.currentUser?.uid, "time" : timestamp] as [String : Any]
+                                let value = ["text" : self.answer_tex, "type" : "photo", "content" : downUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                                 ref.updateChildValues(value)
                                 self.dismiss(animated: true, completion: nil)
                             }
@@ -181,14 +182,14 @@ RPPreviewViewControllerDelegate {
 //            videoUpload.isEnabled = false
 //        }
 //    }
-    func screenRecorderDidChangeAvailability(screenRecorder: RPScreenRecorder) {
+    func screenRecorderDidChangeAvailability(_ screenRecorder: RPScreenRecorder) {
         print("Screen recording availability changed")
     }
     
     
     
-    func screenRecorder(screenRecorder: RPScreenRecorder,
-                        didStopRecordingWithError error: NSError,
+    func screenRecorder(_ screenRecorder: RPScreenRecorder,
+                        didStopRecordingWithError error: Error,
                         previewViewController: RPPreviewViewController?) {
         print("Screen recording finished")
     }
@@ -212,7 +213,7 @@ RPPreviewViewControllerDelegate {
                         }
                         if let storageUrl = metadata?.downloadURL()?.absoluteString{
                         let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
-                            let value = ["text" : self.answer_tex, "type" : "video", "content" : storageUrl, "writer" : FIRAuth.auth()?.currentUser?.uid, "time" : timestamp] as [String : Any]
+                            let value = ["text" : self.answer_tex, "type" : "video", "content" : storageUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                             ref.updateChildValues(value)
                             self.dismiss(animated: true, completion: nil)
 
@@ -251,10 +252,10 @@ RPPreviewViewControllerDelegate {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         
-        let imgDownAction = UIAlertAction(title: "질문 사진", style: .default) { (action) in
+        //let imgDownAction = UIAlertAction(title: "질문 사진", style: .default) { (action) in
         //서버에서 사진 가져오기
         
-        }
+        //}
         //dialog.addAction(cameraAction)
         
         

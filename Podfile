@@ -10,6 +10,8 @@ target 'Teacher' do
  pod 'Firebase/Auth'
  pod 'Firebase/Storage'
  pod 'Firebase/Database'
+ pod 'Firebase/Messaging'
  pod 'GoogleSignIn'
  pod 'TouchDraw', '~> 2.0'
+ pod 'BMPlayer'
 end

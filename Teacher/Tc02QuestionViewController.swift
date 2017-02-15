@@ -24,7 +24,6 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     var question_txt : String = ""
     var palett : CustomPalettView?
     
-    
     @IBAction func cancleAction(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
     }
@@ -108,7 +107,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     @IBAction func uploadAction(_ sender: Any) {
         
         UIGraphicsBeginImageContext(self.mergeView.frame.size) // 이미지 context 생성
-        view.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
+        mergeView.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
         let mergeImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()! //현재 image context -> UIImage로 저장
         UIGraphicsEndImageContext()
         let timestamp = Int(NSDate().timeIntervalSince1970)
@@ -118,14 +117,15 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
             storage.put(uploadImage, metadata: nil, completion: { (metadata, error) in
                 
                 if error != nil {
-                    print(error)
+                    print(error as Any)
                     return
                 }else{
                     if let downUrl = metadata?.downloadURL()?.absoluteString{
                         let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/")
                         let userReference = ref.child("Question").childByAutoId()
-                        //let readCount = 0
-                        let value : Dictionary = ["questionText" : "ABCDaaaaaaaE" , "writerUid": FIRAuth.auth()?.currentUser?.uid, "questionPic" : downUrl, "readCount" : 0, "answerCount" : 0,"writerName" : FIRAuth.auth()?.currentUser?.displayName ] as! [String : Any]
+                        let uid = (FIRAuth.auth()?.currentUser?.uid)! as String
+                        let name = (FIRAuth.auth()?.currentUser?.displayName)! as String
+                        let value : Dictionary = ["questionText" : "ABCDaaaaaaaE" , "writerUid": uid, "questionPic" : downUrl, "readCount" : 0, "answerCount" : 0,"writerName" : name ] as [String : Any]
                         userReference.updateChildValues(value)
                     }
                     

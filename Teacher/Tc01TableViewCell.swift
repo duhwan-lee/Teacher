@@ -10,6 +10,7 @@ import UIKit
 
 class Tc01TableViewCell: UITableViewCell {
 
+    @IBOutlet weak var answerCount: UILabel!
     @IBOutlet weak var writeTag: UILabel!
     @IBOutlet weak var writeTime: UILabel!
     @IBOutlet weak var writerName: UILabel!

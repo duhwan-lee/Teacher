@@ -125,7 +125,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                         let userReference = ref.child("Question").childByAutoId()
                         let uid = (FIRAuth.auth()?.currentUser?.uid)! as String
                         let name = (FIRAuth.auth()?.currentUser?.displayName)! as String
-                        let value : Dictionary = ["questionText" : "ABCDaaaaaaaE" , "writerUid": uid, "questionPic" : downUrl, "readCount" : 0, "answerCount" : 0,"writerName" : name ] as [String : Any]
+                        let value : Dictionary = ["questionText" : self.question_txt , "writerUid": uid, "questionPic" : downUrl, "readCount" : 0, "answerCount" : 0,"writerName" : name, "writeTime": timestamp] as [String : Any]
                         userReference.updateChildValues(value)
                     }
                     

@@ -23,6 +23,7 @@ class Question : NSObject{
     var questionText : String?
     var writerUid : String?
     var writerName : String?
+    var writeTime : String?
     var contentNumber : String?
 }
 class Message: NSObject{

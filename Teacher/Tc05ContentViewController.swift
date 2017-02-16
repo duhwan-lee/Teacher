@@ -13,6 +13,7 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var tableview: UITableView!
     var writer_Uid : String?
     var content_Number : String?
+    var write_Time : String?
     var writer_Name : String?
     var queue = OperationQueue()
     var sections = [Section]()
@@ -20,18 +21,61 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     var typeArr = [String]()
     var keyArr = [String]()
     var answers = [Answer]()
+    let recognizer = UITapGestureRecognizer()
+    @IBOutlet weak var cellHeight: NSLayoutConstraint!
     @IBOutlet weak var questionPic: UIImageView!
     @IBOutlet weak var qeustionText: UILabel!
     @IBOutlet weak var writerName: UILabel!
-    @IBOutlet weak var writerPic: UIImageView!
+    @IBOutlet weak var writerPic: RoundedImageView!
     
+    @IBOutlet weak var writeTime: UILabel!
     @IBAction func answerAction(_ sender: Any) {
         performSegue(withIdentifier: "tc07_segue", sender: content_Number)
+    }
+    func profileImageHasBeenTapped(){
+        performSegue(withIdentifier: "tc04_segue", sender: nil)
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.writerName.text = writer_Name
+        self.writeTime.text = write_Time
+        writerPic.isUserInteractionEnabled = true
+
+        recognizer.addTarget(self, action: #selector(Tc05ContentViewController.profileImageHasBeenTapped))
+        writerPic.addGestureRecognizer(recognizer)
+
+        if let uid = writer_Uid {
+            let user_ref=FIRDatabase.database().reference().child("Users").child(uid)
+            user_ref.observe(.value, with: { (userSnapshot) in
+                if let userdic = userSnapshot.value as? [String : Any]{
+                    let image = userdic["profileImg"] as? String
+                        self.queue.addOperation {
+                            if let url = URL(string: image!),
+                                let data = try? Data(contentsOf: url),
+                                let image = UIImage(data:data) {
+                                OperationQueue.main.addOperation {
+                                    self.writerPic.image = image
+                                }
+                            }
+                        }
+                    
+                    
+                    
+                    
+                    
+                }
+            }, withCancel: nil)
+            
+        }
+    
     }
     override func viewWillAppear(_ animated: Bool) {
         FIRDatabase.database().reference().child("Question").child(content_Number!).observe(.value , with: { (FIRDataSnapshot) in
             if let dictionary = FIRDataSnapshot.value as? [String : Any]{
                 self.qeustionText.text = dictionary["questionText"] as? String
+                
                 let pickStr = dictionary["questionPic"] as? String
                 self.queue.addOperation {
                     if let url = URL(string: pickStr!),
@@ -40,6 +84,8 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
                         OperationQueue.main.addOperation {
                             self.questionPic.image = image
                         }
+                    }else{
+                        self.cellHeight.constant = self.view.frame.height / 2
                     }
                 }
                 if let ans = dictionary["answer"] as? [String: Any]{
@@ -68,10 +114,7 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
             
         })
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.writerName.text = writer_Name
-    }
+    
     
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -104,8 +147,15 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = sections[indexPath.section].items[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! Tc05TableViewCell
+        cell.answerText.text = sections[indexPath.section].items[indexPath.row]
+        if answers[indexPath.row].type == "video" {
+            cell.typeImage.image = #imageLiteral(resourceName: "video-player")
+        }else if answers[indexPath.row].type == "photo" {
+            cell.typeImage.image = #imageLiteral(resourceName: "picture")
+        }else {
+            cell.typeImage.image = #imageLiteral(resourceName: "justify")
+        }
         //print(typeArr[indexPath.row])
         return cell
     }
@@ -157,5 +207,12 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
             photoVC.text = answers[idx].text
             photoVC.type = answers[idx].type
         }
+        
+        if segue.identifier == "tc04_segue"{
+            let profileVC = segue.destination as! Tc04MyViewController
+            profileVC.modalFlag = true
+            profileVC.uid = writer_Uid
+        }
+        
     }
 }

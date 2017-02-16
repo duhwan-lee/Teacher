@@ -11,6 +11,7 @@
 		870C71061E4A03FE00DE211D /* CustomPalettView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C71051E4A03FE00DE211D /* CustomPalettView.swift */; };
 		8718C1DB1E4C4EBA007AB054 /* Tc03ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8718C1DA1E4C4EBA007AB054 /* Tc03ChatViewController.swift */; };
 		8718C1DD1E4C4F06007AB054 /* Tc03ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8718C1DC1E4C4F06007AB054 /* Tc03ChatTableViewCell.swift */; };
+		8732B3AA1E557DE400515D99 /* Tc05TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732B3A91E557DE400515D99 /* Tc05TableViewCell.swift */; };
 		8753A0F71E518467001D53B2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753A0F61E518467001D53B2 /* Extensions.swift */; };
 		8753A0F91E5184B5001D53B2 /* CollapsibleTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753A0F81E5184B5001D53B2 /* CollapsibleTableViewHeader.swift */; };
 		8753A0FC1E518DC6001D53B2 /* Tc07RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753A0FB1E518DC6001D53B2 /* Tc07RecordViewController.swift */; };
@@ -44,6 +45,7 @@
 		870C71051E4A03FE00DE211D /* CustomPalettView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPalettView.swift; sourceTree = "<group>"; };
 		8718C1DA1E4C4EBA007AB054 /* Tc03ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc03ChatViewController.swift; sourceTree = "<group>"; };
 		8718C1DC1E4C4F06007AB054 /* Tc03ChatTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc03ChatTableViewCell.swift; sourceTree = "<group>"; };
+		8732B3A91E557DE400515D99 /* Tc05TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc05TableViewCell.swift; sourceTree = "<group>"; };
 		8753A0F61E518467001D53B2 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8753A0F81E5184B5001D53B2 /* CollapsibleTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleTableViewHeader.swift; sourceTree = "<group>"; };
 		8753A0FB1E518DC6001D53B2 /* Tc07RecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc07RecordViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +135,14 @@
 			name = Tc02;
 			sourceTree = "<group>";
 		};
+		8732B3AB1E558DCD00515D99 /* Tc04 */ = {
+			isa = PBXGroup;
+			children = (
+				875C99281E53ED39002A62AE /* Tc04MyViewController.swift */,
+			);
+			name = Tc04;
+			sourceTree = "<group>";
+		};
 		8753A0F31E514344001D53B2 /* Tc03-08 */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +160,7 @@
 				8784FA711E49C2E100C3929E /* Tc05ContentViewController.swift */,
 				8753A0F81E5184B5001D53B2 /* CollapsibleTableViewHeader.swift */,
 				8753A0F61E518467001D53B2 /* Extensions.swift */,
+				8732B3A91E557DE400515D99 /* Tc05TableViewCell.swift */,
 			);
 			name = Tc05;
 			sourceTree = "<group>";
@@ -181,7 +192,7 @@
 				875F2B6D1E480CF800FE958F /* Main.storyboard */,
 				875F2B831E48198800FE958F /* Teacher-Bridging-Header.h */,
 				875F2B7F1E48178B00FE958F /* TcAuthViewController.swift */,
-				875C99281E53ED39002A62AE /* Tc04MyViewController.swift */,
+				8732B3AB1E558DCD00515D99 /* Tc04 */,
 				8753A0FD1E52DA7A001D53B2 /* Tc06AnswerVideoViewController.swift */,
 				875C99261E53EC6C002A62AE /* Tc06AnswerPhotoViewController.swift */,
 				8753A0FB1E518DC6001D53B2 /* Tc07RecordViewController.swift */,
@@ -341,6 +352,7 @@
 				8753A0FE1E52DA7A001D53B2 /* Tc06AnswerVideoViewController.swift in Sources */,
 				875C99271E53EC6C002A62AE /* Tc06AnswerPhotoViewController.swift in Sources */,
 				875C992B1E53FA1B002A62AE /* Tc09SettingViewController.swift in Sources */,
+				8732B3AA1E557DE400515D99 /* Tc05TableViewCell.swift in Sources */,
 				8784FA6A1E48543600C3929E /* Tc01TableViewCell.swift in Sources */,
 				8718C1DD1E4C4F06007AB054 /* Tc03ChatTableViewCell.swift in Sources */,
 			);

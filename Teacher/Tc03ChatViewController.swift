@@ -12,7 +12,7 @@ import Firebase
 class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var chatChannel : String?
     var chArr = [Channel]()
-    
+    var queue = OperationQueue()
     @IBOutlet weak var tableview: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,16 +28,28 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Tc03_cell", for: indexPath) as! Tc03ChatTableViewCell
-        
-        cell.textLabel?.text = chArr[indexPath.row].text
+        cell.chatText.text = chArr[indexPath.row].text
+        cell.chatTime.text = chArr[indexPath.row].time
         if let uid = chArr[indexPath.row].uid {
             let user_ref=FIRDatabase.database().reference().child("Users").child(uid)
             user_ref.observe(.value, with: { (userSnapshot) in
                 if let userdic = userSnapshot.value as? [String : Any]{
                     let name = userdic["name"] as? String
-                    //let image = userdic["profileImge"] as? String
+                    let image = userdic["profileImg"] as? String
                     self.chArr[indexPath.row].name = name
-                    cell.textLabel?.text = name
+                    cell.chatName.text = name
+                    
+                    self.queue.addOperation {
+                        if let url = URL(string: image!),
+                            let data = try? Data(contentsOf: url),
+                            let image = UIImage(data:data) {
+                            OperationQueue.main.addOperation {
+                                cell.pofileImg.image = image
+                            }
+                        }
+                    }
+                
+                    
                 }
             }, withCancel: nil)
 
@@ -78,7 +90,7 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
                     let seconds = dictionary["lastDate"] as! Int
                     let timestampDate = NSDate(timeIntervalSince1970: TimeInterval(seconds))
                     let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "MM-dd a hh:mm:ss"
+                    dateFormatter.dateFormat = "yyyy-MM-dd a hh:mm:ss"
                     let timetext = dateFormatter.string(from: timestampDate as Date)
                     ch.time = timetext
                     self.chArr.append(ch)

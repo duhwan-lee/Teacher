@@ -32,10 +32,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        //try! FIRAuth.auth()!.signOut()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if (FIRAuth.auth()?.currentUser) != nil {
-
+            let uid = (FIRAuth.auth()?.currentUser?.uid)! as String
+            let ref = FIRDatabase.database().reference().child("Users").child(uid)
+            let name = (FIRAuth.auth()?.currentUser?.displayName)! as String
+            
+            let url = String( describing: (FIRAuth.auth()?.currentUser?.photoURL)!)
+            let value : Dictionary = ["name" : name, "profileImg":url]
+            ref.updateChildValues(value)
+            
             let initialViewController = storyboard.instantiateViewController(withIdentifier: "tabView")
             
             self.window?.rootViewController = initialViewController

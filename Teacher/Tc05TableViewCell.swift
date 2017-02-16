@@ -1,19 +1,17 @@
 //
-//  Tc03ChatTableViewCell.swift
+//  Tc05TableViewCell.swift
 //  Teacher
 //
-//  Created by doohwan Lee on 2017. 2. 9..
+//  Created by doohwan Lee on 2017. 2. 16..
 //  Copyright © 2017년 doohwan Lee. All rights reserved.
 //
 
 import UIKit
 
-class Tc03ChatTableViewCell: UITableViewCell {
+class Tc05TableViewCell: UITableViewCell {
 
-    @IBOutlet weak var chatTime: UILabel!
-    @IBOutlet weak var chatText: UILabel!
-    @IBOutlet weak var chatName: UILabel!
-    @IBOutlet weak var pofileImg: RoundedImageView!
+    @IBOutlet weak var answerText: UILabel!
+    @IBOutlet weak var typeImage: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

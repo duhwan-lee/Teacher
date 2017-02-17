@@ -10,24 +10,37 @@ import UIKit
 import TouchDraw
 import Firebase
 
-class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, CustomPalettViewDelegate {
+class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CustomPalettViewDelegate {
     
+    @IBOutlet weak var clearButton: UIBarButtonItem!
+    @IBOutlet weak var undoButton: UIBarButtonItem!
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var borderView: UIView!
     @IBOutlet weak var photoButton: UIBarButtonItem!
-    @IBOutlet weak var tagTextField: UITextField!
     @IBOutlet weak var mergeView: UIView!
     @IBOutlet weak var TextButton: UIBarButtonItem!
     @IBOutlet weak var ImageContainView: UIView!
     @IBOutlet weak var drawView: TouchDrawView!
     var placeholderLabel : UILabel!
-    var textview : UITextView!
     var dialog : UIAlertController!
     var penWidth : CGFloat = 2.0
     var question_txt : String = ""
     var palett : CustomPalettView?
-    
+    var imageFlag = false
+    var drawFlag = false
     @IBAction func cancleAction(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
     }
+  
+
+    @IBAction func undoAction(_ sender: Any) {
+        drawView.undo()
+    }
+    
+    @IBAction func clearAction(_ sender: Any) {
+        drawView.clearDrawing()
+    }
+    
     
     @IBAction func imagePickAction(_ sender: Any) {
         let dialog = UIAlertController(title: "이미지 선택", message: nil, preferredStyle: .actionSheet)
@@ -45,6 +58,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
             imagePicker.sourceType = .photoLibrary //앨범에서 이미지 가져옴
             self.present(imagePicker, animated: true)
             
+            
         }
         dialog.addAction(albumAction)
         
@@ -52,6 +66,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (action) in
         }
         if let popvc = dialog.popoverPresentationController{
+            
             popvc.sourceView = self.view
         }
         dialog.addAction(cancelAction)
@@ -59,11 +74,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         self.present(dialog, animated: true, completion: nil)
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() //키보드 return값 설정
-        tagTextField.resignFirstResponder()
-        return true
-    }
+
     
     func setColor(color: UIColor) {
         drawView.setColor(color)
@@ -73,15 +84,8 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         penWidth = CGFloat(width)
         drawView.setWidth(penWidth)
     }
-    func setUndo(){
-        drawView.undo()
-    }
-    func setClear(){
-        drawView.clearDrawing()
-        self.dismiss(animated: true, completion: nil)
-    }
-    @IBAction func drawAction(_ sender: Any) {
-        dialog = UIAlertController(title: "\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
+        @IBAction func drawAction(_ sender: Any) {
+        dialog = UIAlertController(title: "\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
             let margin:CGFloat = 4.0
             let rect = CGRect(x: margin, y: margin, width: dialog.view.frame.size.width-(margin*6), height: 150.0)
             palett = CustomPalettView(frame: rect)
@@ -106,67 +110,81 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         self.present(dialog, animated: true, completion: nil)
     }
     @IBAction func uploadAction(_ sender: Any) {
-        
-        UIGraphicsBeginImageContext(self.mergeView.frame.size) // 이미지 context 생성
-        mergeView.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
-        let mergeImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()! //현재 image context -> UIImage로 저장
-        UIGraphicsEndImageContext()
-        let timestamp = Int(NSDate().timeIntervalSince1970)
-        let filename = (FIRAuth.auth()?.currentUser?.uid)! + String(timestamp) + ".png"
-        let storage = FIRStorage.storage().reference().child("Question").child(filename)
-        if let uploadImage = UIImagePNGRepresentation(mergeImage){
-            storage.put(uploadImage, metadata: nil, completion: { (metadata, error) in
+        if textView.text.isEmpty {
+            let dialog = UIAlertController(title: "업로드 확인", message: "본문이 없습니다.\n본문을 입력해주세요", preferredStyle: .alert)
+            
+            
+            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
                 
-                if error != nil {
-                    print(error as Any)
-                    return
-                }else{
-                    if let downUrl = metadata?.downloadURL()?.absoluteString{
-                        let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/")
-                        let userReference = ref.child("Question").childByAutoId()
-                        let uid = (FIRAuth.auth()?.currentUser?.uid)! as String
-                        let name = (FIRAuth.auth()?.currentUser?.displayName)! as String
-                        let value : Dictionary = ["questionText" : self.question_txt , "writerUid": uid, "questionPic" : downUrl, "readCount" : 0, "answerCount" : 0,"writerName" : name, "writeTime": timestamp] as [String : Any]
-                        userReference.updateChildValues(value)
-                    }
-                    
-                }
+            }
+            
+            dialog.addAction(okAction)
+            
+            self.present(dialog, animated: true, completion: nil)
+            return
+        }
+        let uid = (FIRAuth.auth()?.currentUser?.uid)! as String
+        let name = (FIRAuth.auth()?.currentUser?.displayName)! as String
+        let timestamp = Int(NSDate().timeIntervalSince1970)
+        if !drawFlag, !imageFlag {
+            let dialog = UIAlertController(title: "업로드 확인", message: "텍스트만 질문하시겠습니까?", preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action) in
+                
             })
+            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+                let ref = FIRDatabase.database().reference()
+                let userReference = ref.child("Question").childByAutoId()
+                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : "null", "writerName" : name, "writeTime": timestamp] as [String : Any]
+                userReference.updateChildValues(value)
+                self.dismiss(animated: true, completion: nil)
+            }
+            dialog.addAction(cancelAction)
+            dialog.addAction(okAction)
+            
+            self.present(dialog, animated: true, completion: nil)
+        }else{
+            let dialog = UIAlertController(title: "업로드 확인", message: "입력하신 내용으로 질문하시겠습니까?", preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action) in
+                
+            })
+            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+                UIGraphicsBeginImageContext(self.mergeView.frame.size) // 이미지 context 생성
+                self.mergeView.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
+                let mergeImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()! //현재 image context -> UIImage로 저장
+                UIGraphicsEndImageContext()
+                let filename = (FIRAuth.auth()?.currentUser?.uid)! + String(timestamp) + ".png"
+                let storage = FIRStorage.storage().reference().child("Question").child(filename)
+                if let uploadImage = UIImagePNGRepresentation(mergeImage){
+                    storage.put(uploadImage, metadata: nil, completion: { (metadata, error) in
+                        
+                        if error != nil {
+                            print(error as Any)
+                            return
+                        }else{
+                            if let downUrl = metadata?.downloadURL()?.absoluteString{
+                                let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/")
+                                let userReference = ref.child("Question").childByAutoId()
+                                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : downUrl, "writerName" : name, "writeTime": timestamp] as [String : Any]
+                                userReference.updateChildValues(value)
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                            
+                        }
+                    })
+                }
+                
+            }
+            dialog.addAction(cancelAction)
+            dialog.addAction(okAction)
+            
+            self.present(dialog, animated: true, completion: nil)
+            
         }
-        
         
     }
     
-    @IBAction func textAction(_ sender: Any) {
-        dialog = UIAlertController(title: "\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
-        let margin:CGFloat = 8.0
-        let rect = CGRect(x: margin, y: margin, width: dialog.view.bounds.size.width - margin * 4.0, height: 100.0)
-        textview = UITextView(frame: rect)
-        
-        textview.backgroundColor = UIColor.clear
-        textview.font = UIFont(name: "Helvetica", size: 15)
-    
-        //  customView.backgroundColor = UIColor.greenColor()
-        textview.text = question_txt
-        dialog.view.addSubview(textview)
-        
-        let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-            self.question_txt = self.textview.text!
-        }
-        dialog.addAction(okAction)
-        
-        
-        if let popvc = dialog.popoverPresentationController{
-            popvc.sourceView = self.view
-        }
-        
-        self.present(dialog, animated: true, completion: nil)
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        photoButton.setBackgroundImage(#imageLiteral(resourceName: "photo"), for: .normal, barMetrics: .default)
-        placeholderLabel.isHidden = !textView.text.isEmpty
-    }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{ //수정되지 않은 이미지 선택
@@ -177,6 +195,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                 //let imageview = UIImageView(image: image)
                 
                 ImageContainView.addSubview(imageview)
+                imageFlag = true
                 dismiss(animated: true, completion: nil)
             }else{
                 //imageView.image = image
@@ -185,6 +204,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                 imageview.image = newimage
                 
                 ImageContainView.addSubview(imageview)
+                imageFlag = true
                 dismiss(animated: true, completion: nil)
             }
         }
@@ -195,7 +215,14 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         drawView.delegate = self
         drawView.setWidth(2.0)
         drawView.backgroundColor = UIColor(white: 1, alpha: 0.0)
-
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width , height: 1)
+        topBorder.backgroundColor = UIColor.gray.cgColor
+        borderView.layer.addSublayer(topBorder)
+        makeCloseButton()
+        undoButton.isEnabled = false
+        clearButton.isEnabled = false
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -216,34 +243,54 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     }
     func keyboardWillShow(_ noti : Notification){
         
-        if let rectObj = noti.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue, tagTextField.isFirstResponder
+        if let rectObj = noti.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue, textView.isFirstResponder
         {
             // 키보드 높이 가져옴
             let keyboardRect = rectObj.cgRectValue
             // 키보드 높이 만큼 화면 밀기
             self.view.frame.origin.y = 0 - keyboardRect.height
         }
-
-        else if let rectObj = noti.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue, textview.isFirstResponder
-        {
-            // 키보드 높이 가져옴
-            let keyboardRect = rectObj.cgRectValue
-            // 키보드 높이 만큼 화면 밀기
-            self.view.frame.origin.y = 0 - keyboardRect.height
-            self.dialog.view.frame.origin.y = keyboardRect.height
-        }    }
-    
+    }
     func keyboardWillHide(_ noti : Notification){
         self.view.frame.origin.y = 0
     }
 
+    func makeCloseButton(){
+        let buttonView: UIView = UIView()
+        let viewWidth: CGFloat = self.view.bounds.size.width
+        let viewHeight: CGFloat = 44
+        let viewRect: CGRect = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        buttonView.frame = viewRect
+        buttonView.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        
+        let closeButton: UIButton = UIButton(type: UIButtonType.system)
+        let buttonWidth: CGFloat = 60
+        let buttonHeight: CGFloat = 30
+        let buttonRect: CGRect = CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight)
+        closeButton.bounds = buttonRect
+        let buttonMargin: CGFloat = 10
+        let buttonCenterX = self.view.bounds.size.width - buttonMargin - buttonWidth / 2
+        let buttonCenterY = buttonView.bounds.size.height / 2
+        let buttonCenter = CGPoint(x: buttonCenterX, y: buttonCenterY)
+        closeButton.center = buttonCenter
+        closeButton.setTitle("Close", for: UIControlState())
+        
+        closeButton.addTarget(self, action: #selector(Tc02QuestionViewController.closeKeyboard), for: UIControlEvents.touchUpInside)
+        
+        buttonView.addSubview(closeButton)
+        
+        self.textView.inputAccessoryView = buttonView
+    }
     
+    func closeKeyboard(){
+        self.textView.resignFirstResponder()
+    }
     func undoEnabled() {
-    palett?.undoButton.isEnabled = true
+    undoButton.isEnabled = true
     }
     
     func undoDisabled() {
-    palett?.undoButton.isEnabled = false
+    undoButton.isEnabled = false
     }
     
     func redoEnabled() {
@@ -253,9 +300,13 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     }
     
     func clearEnabled() {
+        clearButton.isEnabled = true
+        drawFlag = true
     }
     
     func clearDisabled() {
+        clearButton.isEnabled = false
+        drawFlag = false
     }
     
 }

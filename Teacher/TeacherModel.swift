@@ -39,6 +39,7 @@ class Channel : NSObject {
     var text : String?
     var time : String?
     var image : String?
+    var img : UIImage?
 }
 class Answer : NSObject {
     var text : String?

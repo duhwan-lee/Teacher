@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Tc09SettingViewController: UIViewController {
+class Tc09SettingViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

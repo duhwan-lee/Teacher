@@ -12,8 +12,6 @@ import Foundation
 @objc protocol CustomPalettViewDelegate {
     func setColor(color : UIColor)
     func setPenWidth(width : Float)
-    func setUndo()
-    func setClear()
 }
 
 @IBDesignable
@@ -56,12 +54,6 @@ class CustomPalettView: UIView {
     @IBAction func sliderAction(_ sender: Any) {
         self.delegate?.setPenWidth(width: slider.value)
     }
-    @IBAction func RedoAction(_ sender: Any) {
-        self.delegate?.setUndo()
-    }
-    @IBAction func ClearAction(_ sender: Any) {
-        self.delegate?.setClear()
-    }
-
+   
 
 }

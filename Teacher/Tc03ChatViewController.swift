@@ -13,6 +13,7 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
     var chatChannel : String?
     var chArr = [Channel]()
     var queue = OperationQueue()
+    var user_img : UIImage?
     @IBOutlet weak var tableview: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +45,7 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
                         if let url = URL(string: image!),
                             let data = try? Data(contentsOf: url),
                             let image = UIImage(data:data) {
+                            
                             OperationQueue.main.addOperation {
                                 cell.pofileImg.image = image
                             }
@@ -72,7 +74,6 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
             chatVC.toUid = chArr[idx.row].uid
             chatVC.channel = chArr[idx.row].channel_name
             chatVC.toName = chArr[idx.row].name
-            chatVC.toName = chArr[idx.row].image
         }
     }
     

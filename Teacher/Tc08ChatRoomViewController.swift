@@ -226,7 +226,7 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
             viewTop.constant = 44
             let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width , height: 44))
             self.view.addSubview(navBar);
-            let navItem = UINavigationItem(title: "메세지");
+            let navItem = UINavigationItem(title: toName!);
             let doneItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: #selector(back));
             navItem.leftBarButtonItem = doneItem;
             navBar.setItems([navItem], animated: false);

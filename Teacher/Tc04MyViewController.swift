@@ -58,13 +58,9 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
     }
     override func viewWillAppear(_ animated: Bool) {
         if modalFlag {
-            writeTextLoad(uid!)
-            getAnswersKeys(uid!)
+            
         }else{
-            if let myUid = FIRAuth.auth()?.currentUser?.uid {
-            writeTextLoad(myUid)
-            getAnswersKeys(myUid)
-            }
+            
         }
         
 
@@ -95,6 +91,8 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             navItem.leftBarButtonItem = doneItem;
             navBar.setItems([navItem], animated: false);
             modalAction(uid!)
+            writeTextLoad(uid!)
+            getAnswersKeys(uid!)
         }else{
             messageButton.isEnabled = false
             messageButton.setTitleColor(UIColor.gray, for: UIControlState.normal)
@@ -110,6 +108,10 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                         self.profileImg.image = image
                     }
                 }
+            }
+            if let myUid = FIRAuth.auth()?.currentUser?.uid {
+                writeTextLoad(myUid)
+                getAnswersKeys(myUid)
             }
         }
     }
@@ -312,7 +314,7 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             let chatVC = segue.destination as! Tc08ChatRoomViewController
             chatVC.toUid = uid
             chatVC.channel = myChannel!
-            chatVC.toName = (FIRAuth.auth()?.currentUser?.uid)!
+            chatVC.toName = userName.text
             chatVC.profileImg = profileImg.image
             chatVC.profileFlag = true
         }

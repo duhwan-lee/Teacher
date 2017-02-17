@@ -15,24 +15,15 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var tableView: UITableView!
     
     var question = [Question]()
-    var lastKnowContentOfsset : CGFloat = 0
     var queue = OperationQueue()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
         
-        tableView.backgroundColor = UIColor.clear
         search.barTintColor = UIColor(red: 0.58, green: 0.46, blue: 0.80, alpha: 1)
         tableView.estimatedRowHeight = 1000
         tableView.rowHeight = UITableViewAutomaticDimension
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
-        navigationItem.title = appdelegate.curCategory
-        question.removeAll()
         FIRDatabase.database().reference().child("Question").observe(.childAdded, with: { (FIRDataSnapshot) in
             if let dictionary = FIRDataSnapshot.value as? [String : Any]{
                 let qa = Question()
@@ -57,11 +48,18 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
-
-            
+                
+                
             }
             
         })
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        navigationItem.title = appdelegate.curCategory
+        
         
     }
 

@@ -30,10 +30,15 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     
     @IBOutlet weak var writeTime: UILabel!
     @IBAction func answerAction(_ sender: Any) {
-        performSegue(withIdentifier: "tc07_segue", sender: content_Number)
+        if (FIRAuth.auth()?.currentUser) != nil {
+            performSegue(withIdentifier: "tc07_segue", sender: content_Number)
+        }
+        
     }
     func profileImageHasBeenTapped(){
-        performSegue(withIdentifier: "tc04_segue", sender: nil)
+        if (FIRAuth.auth()?.currentUser) != nil {
+            performSegue(withIdentifier: "tc04_segue", sender: nil)
+        }
     }
     
     

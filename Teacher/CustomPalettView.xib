@@ -13,13 +13,12 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CustomPalettView" customModule="Teacher" customModuleProvider="target">
             <connections>
                 <outlet property="slider" destination="JMg-CJ-zQZ" id="4fq-iE-lke"/>
-                <outlet property="undoButton" destination="fIR-Bo-a0N" id="oQ7-ar-oPX"/>
                 <outlet property="view" destination="iN0-l3-epB" id="juX-hs-kit"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="313" height="150"/>
+            <rect key="frame" x="0.0" y="0.0" width="313" height="120"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O2K-Yl-Gwg">
@@ -85,37 +84,19 @@
                         <action selector="sliderAction:" destination="-1" eventType="valueChanged" id="BFx-tB-dHU"/>
                     </connections>
                 </slider>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fIR-Bo-a0N">
-                    <rect key="frame" x="30" y="113" width="38" height="30"/>
-                    <state key="normal" title="Undo"/>
-                    <connections>
-                        <action selector="RedoAction:" destination="-1" eventType="touchUpInside" id="cge-dr-xCO"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pYq-zG-ZbB">
-                    <rect key="frame" x="247" y="113" width="36" height="30"/>
-                    <state key="normal" title="Clear"/>
-                    <connections>
-                        <action selector="ClearAction:" destination="-1" eventType="touchUpInside" id="iUt-KD-OYN"/>
-                    </connections>
-                </button>
             </subviews>
             <constraints>
-                <constraint firstItem="fIR-Bo-a0N" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="30" id="14n-ru-YC2"/>
                 <constraint firstAttribute="trailing" secondItem="JMg-CJ-zQZ" secondAttribute="trailing" constant="10" id="1hl-VR-Hq6"/>
                 <constraint firstItem="JMg-CJ-zQZ" firstAttribute="top" secondItem="O2K-Yl-Gwg" secondAttribute="bottom" constant="8" id="3b0-OS-4gh"/>
-                <constraint firstItem="pYq-zG-ZbB" firstAttribute="top" secondItem="JMg-CJ-zQZ" secondAttribute="bottom" constant="15" id="EHg-nu-aO2"/>
                 <constraint firstAttribute="trailing" secondItem="O2K-Yl-Gwg" secondAttribute="trailing" id="Lqu-CR-G7m"/>
                 <constraint firstItem="O2K-Yl-Gwg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Lto-OU-zdv"/>
                 <constraint firstItem="JMg-CJ-zQZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="R5l-L8-hFQ"/>
                 <constraint firstItem="O2K-Yl-Gwg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="SGb-TW-fiJ"/>
-                <constraint firstItem="fIR-Bo-a0N" firstAttribute="top" secondItem="JMg-CJ-zQZ" secondAttribute="bottom" constant="15" id="bBE-yH-Fxy"/>
                 <constraint firstItem="O2K-Yl-Gwg" firstAttribute="height" secondItem="JMg-CJ-zQZ" secondAttribute="height" multiplier="2" id="kNP-o5-djJ"/>
-                <constraint firstAttribute="trailing" secondItem="pYq-zG-ZbB" secondAttribute="trailing" constant="30" id="qJF-aF-dzx"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-39.5" y="-220"/>
+            <point key="canvasLocation" x="-39.5" y="-236"/>
         </view>
     </objects>
 </document>

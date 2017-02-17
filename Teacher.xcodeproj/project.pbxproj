@@ -103,6 +103,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		870E43541E56F67B00AAADFC /* Tc04-09 */ = {
+			isa = PBXGroup;
+			children = (
+				875C99281E53ED39002A62AE /* Tc04MyViewController.swift */,
+				875C992A1E53FA1B002A62AE /* Tc09SettingViewController.swift */,
+			);
+			name = "Tc04-09";
+			sourceTree = "<group>";
+		};
 		8718C1D91E4C3B27007AB054 /* Tc01 */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,14 +144,6 @@
 			name = Tc02;
 			sourceTree = "<group>";
 		};
-		8732B3AB1E558DCD00515D99 /* Tc04 */ = {
-			isa = PBXGroup;
-			children = (
-				875C99281E53ED39002A62AE /* Tc04MyViewController.swift */,
-			);
-			name = Tc04;
-			sourceTree = "<group>";
-		};
 		8753A0F31E514344001D53B2 /* Tc03-08 */ = {
 			isa = PBXGroup;
 			children = (
@@ -154,15 +155,18 @@
 			name = "Tc03-08";
 			sourceTree = "<group>";
 		};
-		8753A0FA1E518CB3001D53B2 /* Tc05 */ = {
+		8753A0FA1E518CB3001D53B2 /* Tc05-06-07 */ = {
 			isa = PBXGroup;
 			children = (
 				8784FA711E49C2E100C3929E /* Tc05ContentViewController.swift */,
+				8732B3A91E557DE400515D99 /* Tc05TableViewCell.swift */,
+				8753A0FD1E52DA7A001D53B2 /* Tc06AnswerVideoViewController.swift */,
+				875C99261E53EC6C002A62AE /* Tc06AnswerPhotoViewController.swift */,
+				8753A0FB1E518DC6001D53B2 /* Tc07RecordViewController.swift */,
 				8753A0F81E5184B5001D53B2 /* CollapsibleTableViewHeader.swift */,
 				8753A0F61E518467001D53B2 /* Extensions.swift */,
-				8732B3A91E557DE400515D99 /* Tc05TableViewCell.swift */,
 			);
-			name = Tc05;
+			name = "Tc05-06-07";
 			sourceTree = "<group>";
 		};
 		875F2B5D1E480CF800FE958F = {
@@ -192,15 +196,11 @@
 				875F2B6D1E480CF800FE958F /* Main.storyboard */,
 				875F2B831E48198800FE958F /* Teacher-Bridging-Header.h */,
 				875F2B7F1E48178B00FE958F /* TcAuthViewController.swift */,
-				8732B3AB1E558DCD00515D99 /* Tc04 */,
-				8753A0FD1E52DA7A001D53B2 /* Tc06AnswerVideoViewController.swift */,
-				875C99261E53EC6C002A62AE /* Tc06AnswerPhotoViewController.swift */,
-				8753A0FB1E518DC6001D53B2 /* Tc07RecordViewController.swift */,
-				875C992A1E53FA1B002A62AE /* Tc09SettingViewController.swift */,
 				8718C1D91E4C3B27007AB054 /* Tc01 */,
 				8718C1DF1E4C503B007AB054 /* Tc02 */,
 				8753A0F31E514344001D53B2 /* Tc03-08 */,
-				8753A0FA1E518CB3001D53B2 /* Tc05 */,
+				870E43541E56F67B00AAADFC /* Tc04-09 */,
+				8753A0FA1E518CB3001D53B2 /* Tc05-06-07 */,
 				8718C1DE1E4C5018007AB054 /* SupporFile */,
 			);
 			path = Teacher;

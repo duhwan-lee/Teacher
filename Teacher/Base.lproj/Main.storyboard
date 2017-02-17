@@ -39,7 +39,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iu0-0A-Cb1" id="zuP-1a-rLr">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -132,7 +132,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="316"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MainBackground" translatesAutoresizingMaskIntoConstraints="NO" id="FHK-27-g1r">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_not_available" translatesAutoresizingMaskIntoConstraints="NO" id="FHK-27-g1r">
                                                     <rect key="frame" x="16" y="8" width="343" height="200"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="200" id="YPW-5Z-d8b"/>
@@ -391,7 +391,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IzK-da-XsW" id="Asu-zm-ZTW">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pmm-ml-5ea">
@@ -726,7 +726,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="77"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vFx-ou-6tN" id="SBH-i7-qEb">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="77"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KJa-xe-Txs" customClass="RoundedImageView" customModule="Teacher" customModuleProvider="target">
@@ -856,6 +856,10 @@
                                         <state key="normal" title="메세지 보내기">
                                             <color key="titleColor" red="0.64020428979999999" green="0.053441206149999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="messageAction:" destination="uhf-jD-f8Y" eventType="touchUpInside" id="x4c-xa-FPZ"/>
+                                            <segue destination="JG6-nF-Pah" kind="show" identifier="Tc08_profile_segue" id="ERI-QU-6Vn"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3iB-Hg-fTz">
                                         <rect key="frame" x="104" y="8" width="49" height="24"/>
@@ -874,7 +878,7 @@
                                         </connections>
                                     </segmentedControl>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.90980392160000001" green="0.88235294119999996" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="04z-RV-OjW" firstAttribute="centerX" secondItem="SdQ-HY-hbD" secondAttribute="centerX" id="98B-kn-bnB"/>
                                     <constraint firstItem="04z-RV-OjW" firstAttribute="top" secondItem="Gym-1g-7kI" secondAttribute="bottom" constant="8" id="A8F-fs-Em2"/>
@@ -907,7 +911,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="316"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MainBackground" translatesAutoresizingMaskIntoConstraints="NO" id="b1v-e1-RXS">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_not_available" translatesAutoresizingMaskIntoConstraints="NO" id="b1v-e1-RXS">
                                                     <rect key="frame" x="16" y="8" width="343" height="200"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="200" id="5n3-7e-qw9"/>
@@ -1084,7 +1088,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.90980392160000001" green="0.88235294119999996" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="ShJ-vt-HCS" secondAttribute="bottom" id="8VR-B0-vLI"/>
                             <constraint firstItem="ShJ-vt-HCS" firstAttribute="leading" secondItem="sNa-qu-GXG" secondAttribute="leading" id="L6N-DT-GFr"/>
@@ -1104,7 +1108,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="answerCount" destination="mHm-cy-2jb" id="Qse-Tt-rQW"/>
+                        <outlet property="messageButton" destination="04z-RV-OjW" id="cBG-Gd-CY4"/>
                         <outlet property="profileImg" destination="oyS-Rt-ZeU" id="CMG-yp-4Bm"/>
+                        <outlet property="questionCount" destination="sVU-Bk-26f" id="106-aZ-TXa"/>
                         <outlet property="tableView" destination="ShJ-vt-HCS" id="RLn-yV-hGg"/>
                         <outlet property="userName" destination="3iB-Hg-fTz" id="fMj-5H-9j2"/>
                         <outlet property="viewTop" destination="f5l-Lh-km5" id="GYg-Rd-TbP"/>
@@ -1215,7 +1222,7 @@
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="7nM-uV-FUv"/>
-                                    <barButtonItem title="사진" id="UDa-io-vvE">
+                                    <barButtonItem image="picture" id="UDa-io-vvE">
                                         <connections>
                                             <action selector="imagePickAction:" destination="Azw-p7-C51" id="VqM-f3-fBO"/>
                                         </connections>
@@ -1259,6 +1266,7 @@
                         <outlet property="TextButton" destination="w7Q-Gu-mD7" id="fdU-jM-dfS"/>
                         <outlet property="drawView" destination="8ap-bI-6Ck" id="y0b-Sz-XGP"/>
                         <outlet property="mergeView" destination="x0Z-EB-b6C" id="Mon-lQ-YNC"/>
+                        <outlet property="photoButton" destination="UDa-io-vvE" id="GKN-MJ-Wtn"/>
                         <outlet property="tagTextField" destination="5Qe-Kq-QES" id="bcQ-yX-oCr"/>
                     </connections>
                 </viewController>
@@ -1272,7 +1280,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Mfw-og-8sN" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="질문목록" image="list" selectedImage="list" id="zDM-7K-adG"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="eEa-kT-aoh">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eEa-kT-aoh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1291,7 +1299,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wXA-Ld-br6" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="채팅" image="comments" selectedImage="comments" id="7EF-MF-Wvk"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="llk-Vf-Aep">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="llk-Vf-Aep">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1317,7 +1325,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="30" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oV0-bu-JKV">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Sender" id="iRZ-eL-ult" customClass="SenderCell" customModule="Teacher" customModuleProvider="target">
@@ -1433,6 +1441,7 @@
                         <outlet property="inputBar" destination="gmP-wx-OgA" id="Kiw-DV-cpZ"/>
                         <outlet property="inputTextField" destination="Egs-Wb-pM0" id="oZB-tR-Kg6"/>
                         <outlet property="tableView" destination="oV0-bu-JKV" id="Rva-6X-hwa"/>
+                        <outlet property="viewTop" destination="Pte-sM-nZl" id="imd-HM-WI9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y15-II-5q7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1582,7 +1591,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mb9-hi-2Mn" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="마이 페이지" image="profile" selectedImage="profile" id="3ex-CV-Kkp"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="AhP-XP-c0j">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="AhP-XP-c0j">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1597,10 +1606,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="MainBackground" width="1366" height="768"/>
         <image name="comments" width="32" height="32"/>
+        <image name="img_not_available" width="680" height="295"/>
         <image name="list" width="32" height="32"/>
         <image name="more" width="32" height="25"/>
+        <image name="picture" width="32" height="32"/>
         <image name="profile" width="32" height="32"/>
         <image name="selectCamera" width="32" height="25"/>
         <image name="selectLocation" width="32" height="25"/>
@@ -1610,5 +1620,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0kG-Xf-qiX"/>
+        <segue reference="ERI-QU-6Vn"/>
     </inferredMetricsTieBreakers>
 </document>

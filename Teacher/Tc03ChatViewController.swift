@@ -37,6 +37,7 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
                     let name = userdic["name"] as? String
                     let image = userdic["profileImg"] as? String
                     self.chArr[indexPath.row].name = name
+                    self.chArr[indexPath.row].image = image
                     cell.chatName.text = name
                     
                     self.queue.addOperation {
@@ -71,6 +72,7 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
             chatVC.toUid = chArr[idx.row].uid
             chatVC.channel = chArr[idx.row].channel_name
             chatVC.toName = chArr[idx.row].name
+            chatVC.toName = chArr[idx.row].image
         }
     }
     

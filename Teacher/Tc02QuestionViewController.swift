@@ -12,6 +12,7 @@ import Firebase
 
 class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, CustomPalettViewDelegate {
     
+    @IBOutlet weak var photoButton: UIBarButtonItem!
     @IBOutlet weak var tagTextField: UITextField!
     @IBOutlet weak var mergeView: UIView!
     @IBOutlet weak var TextButton: UIBarButtonItem!
@@ -163,6 +164,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        photoButton.setBackgroundImage(#imageLiteral(resourceName: "photo"), for: .normal, barMetrics: .default)
         placeholderLabel.isHidden = !textView.text.isEmpty
     }
     

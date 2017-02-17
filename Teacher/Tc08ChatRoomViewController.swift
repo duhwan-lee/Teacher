@@ -36,7 +36,10 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     var toName : String?
     let sv = sendValue()
     let locationManager = CLLocationManager()
+    var profileFlag = false
+    var profileImg : UIImage?
     
+    @IBOutlet weak var viewTop: NSLayoutConstraint!
     @IBOutlet var inputBar: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputTextField: UITextField!
@@ -219,9 +222,22 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     //MARK: ViewController lifecycle
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if profileFlag {
+            viewTop.constant = 44
+            let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width , height: 44))
+            self.view.addSubview(navBar);
+            let navItem = UINavigationItem(title: "메세지");
+            let doneItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: #selector(back));
+            navItem.leftBarButtonItem = doneItem;
+            navBar.setItems([navItem], animated: false);
+        }
         self.inputBar.backgroundColor = UIColor.clear
         self.view.layoutIfNeeded()
         NotificationCenter.default.addObserver(self, selector: #selector(self.showKeyboard(notification:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+    }
+    
+    func back(){
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

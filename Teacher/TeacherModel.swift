@@ -65,5 +65,5 @@ struct Section {
     }
 }
 
-let tc_category_dic = ["tc_all" : "전체", "tc_h1_m" : "고1 수학", "tc_h2_m": "고2 수학", "tc_h3_m" : "고3 수학"," tc_h_e": "수능영어"]
+let tc_category_dic = ["고1 수학" : "tc_h1_m" ,"고2 수학" : "tc_h2_m", "고3 수학" : "tc_h3_m" , "수능영어" : " tc_h_e"]
 let tc_category = ["전체", "고1 수학", "고2 수학", "고3 수학","수능영어"]

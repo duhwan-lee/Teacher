@@ -7,11 +7,18 @@
 //
 
 import UIKit
+protocol categoryDelegate : class{
+    func categorySearch(cate : String)
+}
 
 class Tc01categoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    weak var delegate : categoryDelegate!
+    let test = "abc"
     @IBOutlet weak var tableview: UITableView!
-
+    
+    var lastCate : String?
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tc01_cate_cell")
         cell?.textLabel?.text = tc_category[indexPath.row]
@@ -24,12 +31,18 @@ class Tc01categoryViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        (UIApplication.shared.delegate as! AppDelegate).curCategory = tc_category[indexPath.row]
-        self.dismiss(animated: true, completion: nil)
+        let cate_temp = tc_category[indexPath.row]
+        (UIApplication.shared.delegate as! AppDelegate).curCategory = cate_temp
+        self.dismiss(animated: true) {
+            if cate_temp != self.lastCate! {
+                self.delegate?.categorySearch(cate: cate_temp)
+            }
+            
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        lastCate = (UIApplication.shared.delegate as! AppDelegate).curCategory
     }
     override func viewDidLayoutSubviews() {
         let idx = tc_category.index(of : (UIApplication.shared.delegate as! AppDelegate).curCategory)

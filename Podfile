@@ -14,4 +14,5 @@ target 'Teacher' do
  pod 'GoogleSignIn'
  pod 'TouchDraw', '~> 2.0'
  pod 'BMPlayer'
+ pod 'ActionSheetPicker-3.0'
 end

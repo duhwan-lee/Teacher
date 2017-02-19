@@ -9,8 +9,11 @@
 import UIKit
 import TouchDraw
 import Firebase
+import ActionSheetPicker_3_0
 
 class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CustomPalettViewDelegate {
+    
+    @IBOutlet weak var navi: UINavigationItem!
     
     @IBOutlet weak var clearButton: UIBarButtonItem!
     @IBOutlet weak var undoButton: UIBarButtonItem!
@@ -18,9 +21,12 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     @IBOutlet weak var borderView: UIView!
     @IBOutlet weak var photoButton: UIBarButtonItem!
     @IBOutlet weak var mergeView: UIView!
-    @IBOutlet weak var TextButton: UIBarButtonItem!
     @IBOutlet weak var ImageContainView: UIView!
     @IBOutlet weak var drawView: TouchDrawView!
+    let cateDic = ["고1 수학" : "tc_h1_m", "고2 수학" : "tc_h2_m", "고3 수학" : "tc_h3_m", "수능영어" :"tc_h_e"]
+    var cate : String?
+    var cateName : String?
+    var cateIdx : Int?
     var placeholderLabel : UILabel!
     var dialog : UIAlertController!
     var penWidth : CGFloat = 2.0
@@ -40,8 +46,19 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     @IBAction func clearAction(_ sender: Any) {
         drawView.clearDrawing()
     }
-    
-    
+    @IBAction func categoryAction(_ sender: Any) {
+        ActionSheetStringPicker.show(withTitle: "카테고리 선택", rows:
+            Array(cateDic.keys)
+            , initialSelection: 0 , doneBlock: {
+                picker, indexes, values in
+                self.cateName = values as? String
+                self.navi.title = self.cateName
+                self.cate = self.cateDic[self.cateName!]
+                return
+        }, cancel: { ActionMultipleStringCancelBlock in return }, origin: sender)
+        
+    }
+
     @IBAction func imagePickAction(_ sender: Any) {
         let dialog = UIAlertController(title: "이미지 선택", message: nil, preferredStyle: .actionSheet)
         let imagePicker = UIImagePickerController()
@@ -123,11 +140,25 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
             self.present(dialog, animated: true, completion: nil)
             return
         }
+        
+        if cate == nil {
+                let dialog = UIAlertController(title: "업로드 확인", message: "카테고리를 선택해주세요", preferredStyle: .alert)
+            
+                let okAction = UIAlertAction(title: "확인", style: .default, handler: { (UIAlertAction) in
+                   
+                })
+                
+                dialog.addAction(okAction)
+                
+                self.present(dialog, animated: true, completion: nil)
+                return
+        }
+        
         let uid = (FIRAuth.auth()?.currentUser?.uid)! as String
         let name = (FIRAuth.auth()?.currentUser?.displayName)! as String
         let timestamp = Int(NSDate().timeIntervalSince1970)
         if !drawFlag, !imageFlag {
-            let dialog = UIAlertController(title: "업로드 확인", message: "텍스트만 질문하시겠습니까?", preferredStyle: .alert)
+            let dialog = UIAlertController(title: "업로드 확인", message: "구분 : \(self.cateName!)\n텍스트만 질문하시겠습니까?", preferredStyle: .alert)
             
             let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action) in
                 
@@ -135,7 +166,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
             let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
                 let ref = FIRDatabase.database().reference()
                 let userReference = ref.child("Question").childByAutoId()
-                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : "null", "writerName" : name, "writeTime": timestamp] as [String : Any]
+                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : "null", "writerName" : name, "writeTime": timestamp, "category" : self.cate!] as [String : Any]
                 userReference.updateChildValues(value)
                 self.dismiss(animated: true, completion: nil)
             }
@@ -144,18 +175,25 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
             
             self.present(dialog, animated: true, completion: nil)
         }else{
-            let dialog = UIAlertController(title: "업로드 확인", message: "입력하신 내용으로 질문하시겠습니까?", preferredStyle: .alert)
+            
+            let dialog = UIAlertController(title: "업로드 확인", message: "구분 : \(self.cateName!)\n입력하신 내용으로 질문하시겠습니까?", preferredStyle: .alert)
             
             let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action) in
                 
             })
             let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+
                 UIGraphicsBeginImageContext(self.mergeView.frame.size) // 이미지 context 생성
+
                 self.mergeView.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
                 let mergeImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()! //현재 image context -> UIImage로 저장
+
                 UIGraphicsEndImageContext()
+
                 let filename = (FIRAuth.auth()?.currentUser?.uid)! + String(timestamp) + ".png"
+
                 let storage = FIRStorage.storage().reference().child("Question").child(filename)
+
                 if let uploadImage = UIImagePNGRepresentation(mergeImage){
                     storage.put(uploadImage, metadata: nil, completion: { (metadata, error) in
                         
@@ -166,7 +204,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                             if let downUrl = metadata?.downloadURL()?.absoluteString{
                                 let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/")
                                 let userReference = ref.child("Question").childByAutoId()
-                                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : downUrl, "writerName" : name, "writeTime": timestamp] as [String : Any]
+                                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : downUrl, "writerName" : name, "writeTime": timestamp, "category" : self.cate!] as [String : Any]
                                 userReference.updateChildValues(value)
                                 self.dismiss(animated: true, completion: nil)
                             }
@@ -210,6 +248,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         }
 
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         drawView.delegate = self
@@ -224,11 +263,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         clearButton.isEnabled = false
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }

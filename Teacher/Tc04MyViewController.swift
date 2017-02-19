@@ -71,7 +71,9 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             self.tableView.scrollToRow(at: top as IndexPath, at: .top, animated: true);
         }
     }
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     override func viewDidLoad() {
         tableView.estimatedRowHeight = 1000
         tableView.rowHeight = UITableViewAutomaticDimension

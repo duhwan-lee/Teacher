@@ -16,7 +16,7 @@
         <!--Tc0 1category View Controller-->
         <scene sceneID="68L-di-B8X">
             <objects>
-                <viewController id="t73-pm-27o" customClass="Tc01categoryViewController" customModule="Teacher" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="cate_VC" id="t73-pm-27o" customClass="Tc01categoryViewController" customModule="Teacher" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oRf-eI-nJ5"/>
                         <viewControllerLayoutGuide type="bottom" id="b9a-B2-0HN"/>
@@ -326,7 +326,7 @@
                     <navigationItem key="navigationItem" id="9Xn-z9-Obt">
                         <barButtonItem key="leftBarButtonItem" title="카테고리" id="pHO-Oc-ewe">
                             <connections>
-                                <segue destination="t73-pm-27o" kind="presentation" id="hDm-z1-eP7"/>
+                                <segue destination="t73-pm-27o" kind="presentation" identifier="Tc01cate_segue" id="hDm-z1-eP7"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="질문하기" id="MQU-J7-SDg">
@@ -1208,29 +1208,36 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2a7-xX-CRF">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <items>
-                                    <navigationItem title="Title" id="2Gq-kF-XFi">
+                                    <navigationItem title="질문하기" id="2Gq-kF-XFi">
                                         <barButtonItem key="leftBarButtonItem" title="취소" id="fit-7C-tmV">
                                             <connections>
                                                 <action selector="cancleAction:" destination="Azw-p7-C51" id="4CH-dJ-sV6"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="업로드" id="Z5D-5m-xe6">
-                                            <connections>
-                                                <action selector="uploadAction:" destination="Azw-p7-C51" id="w6q-8h-oGx"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <rightBarButtonItems>
+                                            <barButtonItem title="업로드" id="Z5D-5m-xe6">
+                                                <connections>
+                                                    <action selector="uploadAction:" destination="Azw-p7-C51" id="w6q-8h-oGx"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem title="카테고리" id="IvC-Sy-QNK">
+                                                <connections>
+                                                    <action selector="categoryAction:" destination="Azw-p7-C51" id="Lyg-aV-nXM"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x0Z-EB-b6C">
-                                <rect key="frame" x="0.0" y="44" width="375" height="542"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x0Z-EB-b6C">
+                                <rect key="frame" x="0.0" y="44" width="375" height="491"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xfa-Ex-jR2">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="542"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xfa-Ex-jR2">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="491"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ap-bI-6Ck" customClass="TouchDrawView" customModule="TouchDraw">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="542"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ap-bI-6Ck" customClass="TouchDrawView" customModule="TouchDraw">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="491"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
@@ -1324,7 +1331,8 @@
                         <outlet property="borderView" destination="hpM-rw-14j" id="gG2-zo-MCs"/>
                         <outlet property="clearButton" destination="WUH-QB-NFt" id="prN-zt-sls"/>
                         <outlet property="drawView" destination="8ap-bI-6Ck" id="y0b-Sz-XGP"/>
-                        <outlet property="mergeView" destination="x0Z-EB-b6C" id="Mon-lQ-YNC"/>
+                        <outlet property="mergeView" destination="x0Z-EB-b6C" id="UHS-f3-sOX"/>
+                        <outlet property="navi" destination="2Gq-kF-XFi" id="knx-gm-8lI"/>
                         <outlet property="photoButton" destination="UDa-io-vvE" id="GKN-MJ-Wtn"/>
                         <outlet property="textView" destination="tYI-y9-b0B" id="NoV-Qf-z15"/>
                         <outlet property="undoButton" destination="JhB-uw-730" id="5mA-zy-PQd"/>

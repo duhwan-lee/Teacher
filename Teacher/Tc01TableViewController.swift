@@ -8,22 +8,65 @@
 
 import UIKit
 import Firebase
-class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, categoryDelegate {
 
     @IBOutlet var mainView: UIView!
     @IBOutlet weak var search: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    
+    let appdelegate = UIApplication.shared.delegate as! AppDelegate
     var question = [Question]()
+    var question_all = [Question]()
+    var question_temp = [Question]()
     var queue = OperationQueue()
-
+   
+    func categorySearch(cate : String){
+        if cate == "전체" {
+            self.question = self.question_all
+            DispatchQueue.main.async(execute: {
+                self.tableView.reloadData()
+            })
+        }else{
+            self.question_temp.removeAll()
+            FIRDatabase.database().reference().child("Question").queryOrdered(byChild: "category").queryEqual(toValue: tc_category_dic[cate]!).observeSingleEvent(of: .childAdded, with: { (FIRDataSnapshot) in
+                if let dictionary = FIRDataSnapshot.value as? [String : Any]{
+                    print("123")
+                    let qa = Question()
+                    qa.contentNumber = FIRDataSnapshot.key
+                    qa.questionText = dictionary["questionText"] as! String?
+                    qa.writerUid = dictionary["writerUid"] as! String?
+                    qa.writerName = dictionary["writerName"] as! String?
+                    qa.questionPic = dictionary["questionPic"] as! String?
+                    
+                    let seconds = dictionary["writeTime"] as! Int
+                    let timestampDate = NSDate(timeIntervalSince1970: TimeInterval(seconds))
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd a hh:mm:ss"
+                    qa.writeTime = dateFormatter.string(from: timestampDate as Date)
+                    if let ans = dictionary["answer"] as? [String: Any]{
+                        qa.answerCount = Array(ans.keys).count
+                    }
+                    
+                    self.question_temp.append(qa)
+                        self.question = self.question_temp
+                        DispatchQueue.main.async(execute: {
+                            self.tableView.reloadData()
+                        })
+                    
+                }
+            })
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
-        
+
+    
         search.barTintColor = UIColor(red: 0.58, green: 0.46, blue: 0.80, alpha: 1)
         tableView.estimatedRowHeight = 1000
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        
         FIRDatabase.database().reference().child("Question").observe(.childAdded, with: { (FIRDataSnapshot) in
             if let dictionary = FIRDataSnapshot.value as? [String : Any]{
                 let qa = Question()
@@ -44,11 +87,13 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                     qa.answerCount = Array(ans.keys).count
                 }
                 
-                self.question.append(qa)
-                DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
-                })
-                
+                self.question_all.append(qa)
+                if self.appdelegate.curCategory == "전체" {
+                    self.question = self.question_all
+                    DispatchQueue.main.async(execute: {
+                        self.tableView.reloadData()
+                    })
+                }
                 
             }
             
@@ -57,12 +102,12 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        
         navigationItem.title = appdelegate.curCategory
         
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -137,6 +182,7 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "tc05_segue", sender: indexPath)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -148,7 +194,11 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             contentVC.content_Number = question[idx.row].contentNumber
             contentVC.write_Time = question[idx.row].writeTime
         }
+        
+        if segue.identifier == "Tc01cate_segue"{
+            let cateVC = segue.destination as! Tc01categoryViewController
+            cateVC.delegate = self
+        }
     }
-
 
 }

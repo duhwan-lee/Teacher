@@ -1,4 +1,5 @@
 PODS:
+  - ActionSheetPicker-3.0 (2.2.0)
   - BMPlayer (0.7.1):
     - NVActivityIndicatorView
     - SnapKit (~> 3.0)
@@ -77,6 +78,7 @@ PODS:
   - TouchDraw (2.0.0)
 
 DEPENDENCIES:
+  - ActionSheetPicker-3.0
   - BMPlayer
   - Firebase/Auth
   - Firebase/Core
@@ -87,6 +89,7 @@ DEPENDENCIES:
   - TouchDraw (~> 2.0)
 
 SPEC CHECKSUMS:
+  ActionSheetPicker-3.0: d11a4c12c6aaf704b8a3f56d179198c99f3e41e6
   BMPlayer: 3823671b8f6f76aedd398c21019e4ba2a2c95de1
   Firebase: 8e99eb1ff553ad5bcc6072cc3d925bb89c1244d6
   FirebaseAnalytics: 9c67af0ebeb8d2146c9b4ea2616439affa947b58
@@ -107,6 +110,6 @@ SPEC CHECKSUMS:
   SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
   TouchDraw: 7a95e5f5098e607957e4839d9e083ae029ce06c7
 
-PODFILE CHECKSUM: 3112ed521388f81403adf69102a4a97c0413ca7d
+PODFILE CHECKSUM: fe13ca59c0523f0e539ac797764cc6465c4f64d2
 
 COCOAPODS: 1.2.0

@@ -310,6 +310,9 @@
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="TZd-0p-Srk">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="WH2-mC-pKR" id="EE6-uB-dfo"/>
+                                </connections>
                             </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -590,70 +593,93 @@
                                                 <action selector="cancelAction:" destination="RzG-O7-AAU" id="0F0-45-NOI"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem title="사진" id="wfE-S0-BW5">
-                                                <connections>
-                                                    <action selector="imageUploadAction:" destination="RzG-O7-AAU" id="yTb-Li-tlX"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem title="영상" id="VND-XI-ZaD">
-                                                <connections>
-                                                    <action selector="vedioUploadAction:" destination="RzG-O7-AAU" id="hX0-w4-G3F"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </rightBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" image="cloud-computing" id="wfE-S0-BW5">
+                                            <connections>
+                                                <action selector="imageUploadAction:" destination="RzG-O7-AAU" id="yTb-Li-tlX"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KDK-b3-Dtv">
-                                <rect key="frame" x="0.0" y="44" width="375" height="579"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="491"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aJj-uu-1hq">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="579"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="491"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QxW-In-PsU" customClass="TouchDrawView" customModule="TouchDraw">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="579"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="491"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="aJj-uu-1hq" secondAttribute="bottom" id="53K-O4-OJO"/>
-                                    <constraint firstAttribute="bottom" secondItem="QxW-In-PsU" secondAttribute="bottom" id="Cip-uY-Ihw"/>
-                                    <constraint firstItem="aJj-uu-1hq" firstAttribute="top" secondItem="KDK-b3-Dtv" secondAttribute="top" id="JJK-jB-sYC"/>
-                                    <constraint firstItem="QxW-In-PsU" firstAttribute="leading" secondItem="KDK-b3-Dtv" secondAttribute="leading" id="Mea-1J-5ks"/>
-                                    <constraint firstItem="aJj-uu-1hq" firstAttribute="leading" secondItem="KDK-b3-Dtv" secondAttribute="leading" id="R90-3Z-3zy"/>
-                                    <constraint firstAttribute="trailing" secondItem="QxW-In-PsU" secondAttribute="trailing" id="bRW-4y-gFa"/>
-                                    <constraint firstItem="QxW-In-PsU" firstAttribute="top" secondItem="KDK-b3-Dtv" secondAttribute="top" id="gce-Ya-vLp"/>
-                                    <constraint firstAttribute="trailing" secondItem="aJj-uu-1hq" secondAttribute="trailing" id="ujP-QS-D9v"/>
+                                    <constraint firstAttribute="bottom" secondItem="QxW-In-PsU" secondAttribute="bottom" id="5UM-Od-KuC"/>
+                                    <constraint firstAttribute="trailing" secondItem="QxW-In-PsU" secondAttribute="trailing" id="VkH-fY-vOU"/>
+                                    <constraint firstItem="aJj-uu-1hq" firstAttribute="top" secondItem="KDK-b3-Dtv" secondAttribute="top" id="WSd-hF-v6C"/>
+                                    <constraint firstAttribute="trailing" secondItem="aJj-uu-1hq" secondAttribute="trailing" id="bYt-YX-qWy"/>
+                                    <constraint firstAttribute="bottom" secondItem="aJj-uu-1hq" secondAttribute="bottom" id="elV-Ql-oKt"/>
+                                    <constraint firstItem="aJj-uu-1hq" firstAttribute="leading" secondItem="KDK-b3-Dtv" secondAttribute="leading" id="hE8-gm-2hH"/>
+                                    <constraint firstItem="QxW-In-PsU" firstAttribute="top" secondItem="KDK-b3-Dtv" secondAttribute="top" id="l7o-B5-Pmp"/>
+                                    <constraint firstItem="QxW-In-PsU" firstAttribute="leading" secondItem="KDK-b3-Dtv" secondAttribute="leading" id="pAx-Qv-fAr"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8LG-um-X0u">
+                                <rect key="frame" x="0.0" y="535" width="375" height="88"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7YO-3m-96S">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="88"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="7YO-3m-96S" secondAttribute="bottom" id="bnj-rP-tCk"/>
+                                    <constraint firstAttribute="trailing" secondItem="7YO-3m-96S" secondAttribute="trailing" id="dEu-3x-BHe"/>
+                                    <constraint firstItem="7YO-3m-96S" firstAttribute="leading" secondItem="8LG-um-X0u" secondAttribute="leading" id="gKd-iK-7v8"/>
+                                    <constraint firstItem="7YO-3m-96S" firstAttribute="top" secondItem="8LG-um-X0u" secondAttribute="top" id="u2i-vh-C9B"/>
                                 </constraints>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="btR-JE-49V">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="TiI-Tl-MZ3"/>
-                                    <barButtonItem title="녹화" id="LN2-JX-1ht">
+                                    <barButtonItem image="video-camera" id="LN2-JX-1ht">
+                                        <color key="tintColor" red="0.64020428979999999" green="0.053441206149999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="recordAction:" destination="RzG-O7-AAU" id="0e7-oA-c8l"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="FZO-G5-5Ep"/>
-                                    <barButtonItem title="사진" id="PSG-W4-mdi">
+                                    <barButtonItem image="picture add" id="PSG-W4-mdi">
+                                        <color key="tintColor" red="0.64020428979999999" green="0.053441206149999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="imagePicAction:" destination="RzG-O7-AAU" id="pG6-3Q-YyK"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="XAo-Ns-orh"/>
-                                    <barButtonItem title="필기" id="20e-Ui-2s9">
+                                    <barButtonItem image="undo" id="ySF-Zo-5x5">
+                                        <color key="tintColor" red="0.64020428979999999" green="0.053441206149999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="undoAction:" destination="RzG-O7-AAU" id="tD1-W1-FY9"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Bwe-8u-pee"/>
+                                    <barButtonItem image="paint-palette" id="20e-Ui-2s9">
+                                        <color key="tintColor" red="0.64020428979999999" green="0.053441206149999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="drawAction:" destination="RzG-O7-AAU" id="6Ri-F6-ZNl"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="u39-Nu-02i"/>
-                                    <barButtonItem title="제목" id="nPr-Gi-2zW">
+                                    <barButtonItem image="two-circling-arrows" id="y1Z-qU-heh">
+                                        <color key="tintColor" red="0.64020428979999999" green="0.053441206149999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
-                                            <action selector="textAction:" destination="RzG-O7-AAU" id="hlA-In-taS"/>
+                                            <action selector="clearAction:" destination="RzG-O7-AAU" id="ySr-J2-xiS"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ALT-3S-w9Z"/>
@@ -667,24 +693,31 @@
                             <constraint firstAttribute="trailing" secondItem="I7b-ms-CoE" secondAttribute="trailing" id="Jse-bq-7iq"/>
                             <constraint firstItem="btR-JE-49V" firstAttribute="leading" secondItem="BPf-Xo-0MD" secondAttribute="leading" id="Kgi-xy-8Iu"/>
                             <constraint firstAttribute="trailing" secondItem="btR-JE-49V" secondAttribute="trailing" id="L5f-z4-Btv"/>
-                            <constraint firstItem="btR-JE-49V" firstAttribute="top" secondItem="KDK-b3-Dtv" secondAttribute="bottom" id="SOH-Qd-ifl"/>
+                            <constraint firstItem="8LG-um-X0u" firstAttribute="height" secondItem="btR-JE-49V" secondAttribute="height" multiplier="2" id="Lta-Gv-ltQ"/>
+                            <constraint firstItem="8LG-um-X0u" firstAttribute="leading" secondItem="BPf-Xo-0MD" secondAttribute="leading" id="SVB-au-CJ4"/>
+                            <constraint firstItem="8LG-um-X0u" firstAttribute="top" secondItem="KDK-b3-Dtv" secondAttribute="bottom" id="Udj-86-2dU"/>
                             <constraint firstItem="KDK-b3-Dtv" firstAttribute="leading" secondItem="BPf-Xo-0MD" secondAttribute="leading" id="Vs2-tL-xGN"/>
+                            <constraint firstItem="btR-JE-49V" firstAttribute="top" secondItem="8LG-um-X0u" secondAttribute="bottom" id="a2C-P5-dRj"/>
                             <constraint firstItem="msx-Zu-ZHt" firstAttribute="top" secondItem="btR-JE-49V" secondAttribute="bottom" id="gig-oN-aCH"/>
+                            <constraint firstAttribute="trailing" secondItem="8LG-um-X0u" secondAttribute="trailing" id="hyt-28-oJd"/>
                             <constraint firstItem="KDK-b3-Dtv" firstAttribute="top" secondItem="I7b-ms-CoE" secondAttribute="bottom" id="kRO-Sy-P2U"/>
                             <constraint firstItem="I7b-ms-CoE" firstAttribute="leading" secondItem="BPf-Xo-0MD" secondAttribute="leading" id="p1A-Zk-wrM"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="ImagecontainView" destination="aJj-uu-1hq" id="r9Q-bk-JZI"/>
+                        <outlet property="borderView" destination="8LG-um-X0u" id="ejY-9u-pci"/>
+                        <outlet property="clearButton" destination="y1Z-qU-heh" id="ewC-X3-3b7"/>
                         <outlet property="drawview" destination="QxW-In-PsU" id="KtS-b1-INc"/>
                         <outlet property="mergeView" destination="KDK-b3-Dtv" id="7Lv-6a-oS0"/>
                         <outlet property="recordButton" destination="LN2-JX-1ht" id="dzu-SJ-jX5"/>
-                        <outlet property="videoUpload" destination="VND-XI-ZaD" id="LCz-3f-54Z"/>
+                        <outlet property="textView" destination="7YO-3m-96S" id="hOV-7y-6pq"/>
+                        <outlet property="undoButton" destination="ySF-Zo-5x5" id="tdo-8X-fkQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ljl-eK-6M3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5769" y="-1103"/>
+            <point key="canvasLocation" x="5768.8000000000002" y="-1103.2983508245877"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="g7v-ku-ODP">
@@ -1215,7 +1248,7 @@
                                             </connections>
                                         </barButtonItem>
                                         <rightBarButtonItems>
-                                            <barButtonItem title="업로드" id="Z5D-5m-xe6">
+                                            <barButtonItem image="cloud-computing" id="Z5D-5m-xe6">
                                                 <connections>
                                                     <action selector="uploadAction:" destination="Azw-p7-C51" id="w6q-8h-oGx"/>
                                                 </connections>
@@ -1674,6 +1707,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="cloud-computing" width="32" height="32"/>
         <image name="comments" width="32" height="32"/>
         <image name="img_not_available" width="680" height="295"/>
         <image name="list" width="32" height="32"/>
@@ -1689,6 +1723,7 @@
         <image name="settings" width="32" height="32"/>
         <image name="two-circling-arrows" width="32" height="32"/>
         <image name="undo" width="32" height="32"/>
+        <image name="video-camera" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0kG-Xf-qiX"/>

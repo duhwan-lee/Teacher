@@ -38,7 +38,7 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     let locationManager = CLLocationManager()
     var profileFlag = false
     var profileImg : UIImage?
-    
+    var queue = OperationQueue()
     @IBOutlet weak var viewTop: NSLayoutConstraint!
     @IBOutlet var inputBar: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -63,11 +63,9 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     
     @IBAction func selectGallery(_ sender: Any) {
         self.animateExtraButtons(toHide: true)
-        let status = PHPhotoLibrary.authorizationStatus()
-        if (status == .authorized || status == .notDetermined) {
-            self.imagePicker.sourceType = .savedPhotosAlbum;
-            self.present(self.imagePicker, animated: true, completion: nil)
-        }
+        imagePicker.sourceType = .photoLibrary //앨범에서 이미지 가져옴
+        self.present(imagePicker, animated: true)
+
         
     }
     
@@ -77,6 +75,7 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
         if (status == .authorized || status == .notDetermined) {
             self.imagePicker.sourceType = .camera
             self.imagePicker.allowsEditing = false
+            print("aaaaaaa")
             self.present(self.imagePicker, animated: true, completion: nil)
         }
     }
@@ -105,6 +104,8 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     @IBAction func showOptions(_ sender: Any) {
         self.animateExtraButtons(toHide: false)
     }
+    override func viewWillAppear(_ animated: Bool) {
+    }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 //        self.locationManager.stopUpdatingLocation()
@@ -119,6 +120,7 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
 
     //MARK: Methods
     func customization() {
+        imagePicker.delegate = self
         self.tableView.estimatedRowHeight = self.barHeight
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.contentInset.bottom = self.barHeight
@@ -138,13 +140,17 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
                     msg.time = dictionary[self.sv.time] as? Int
                     msg.toUid = dictionary[self.sv.toUid] as? String
                     msg.fromUiD = dictionary[self.sv.fromUid] as? String
+                    msg.type = dictionary[self.sv.type] as? String
+                    msg.url = dictionary[self.sv.url] as? String
+                    
+                    
+                    
                     self.message.append(msg)
                     self.tableView.reloadData()
                 }
             }, withCancel: nil)
         }
     }
-
     
     func animateExtraButtons(toHide: Bool)  {
         switch toHide {
@@ -161,12 +167,18 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            uploadImage(image: image)
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
 
     
     @IBAction func sendMessage(_ sender: Any) {
         if let txt = inputTextField.text {
             let timeStamp = Int(NSDate().timeIntervalSince1970)
-            messageUpload(txt: txt, time: timeStamp)
+            messageUpload(txt: txt, time: timeStamp, type : "text", url : "null")
             meUpdate(txt: txt, time: timeStamp)
             youUpdate(txt: txt, time: timeStamp)
             inputTextField.text = ""
@@ -199,17 +211,91 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
             })
         }
     }
-    
+    func uploadImage(image : UIImage){
+        let timestamp = Int(NSDate().timeIntervalSince1970)
+        let filename = "chat_"+(FIRAuth.auth()?.currentUser?.uid)! + String(timestamp) + ".png"
+        let storage = FIRStorage.storage().reference().child("Chat").child(filename)
+        if let uploadImage = UIImagePNGRepresentation(image){
+            storage.put(uploadImage, metadata: nil, completion: { (metadata, error) in
+                
+                if error != nil {
+                    print(error as Any)
+                    return
+                }else{
+                    if let downUrl = metadata?.downloadURL()?.absoluteString{
+                        self.messageUpload(txt : "null", time : timestamp, type : "photo", url : downUrl)
+                        self.meUpdate(txt : "사진" , time : timestamp)
+                        self.youUpdate(txt : "사진" , time : timestamp)
+                    }
+                    
+                }
+            })
+        }
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.message[indexPath.row].toUid == toUid {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Receiver", for: indexPath) as! ReceiverCell
                 cell.clearCellData()
+            if message[indexPath.row].type == "photo"{
+                if message[indexPath.row].image == nil {
+                    if let url = URL(string: message[indexPath.row].url!){
+                        queue.addOperation {
+                            do {
+                                let data = try Data(contentsOf: url)
+                                let image = UIImage(data: data)
+                                self.message[indexPath.row].image = image
+                                // show image on MainThread
+                                OperationQueue.main.addOperation {
+                                    
+                                    cell.message.isHidden = true
+                                    tableView.reloadData()
+                                }
+                            }
+                            catch let error {
+                                print("Error : ", error.localizedDescription)
+                            }
+                        }
+                    }
+                    
+                }else{
+                    cell.messageBackground.image = message[indexPath.row].image!
+                    cell.message.isHidden = true
+                }
+            }else{
                 cell.message.text = message[indexPath.row].text
+            }
+            
                 return cell
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "Sender", for: indexPath) as! SenderCell
                 cell.clearCellData()
+            if message[indexPath.row].type == "photo"{
+                if message[indexPath.row].image == nil {
+                    if let url = URL(string: message[indexPath.row].url!){
+                        queue.addOperation {
+                            do {
+                                let data = try Data(contentsOf: url)
+                                let image = UIImage(data: data)
+                                self.message[indexPath.row].image = image
+                                // show image on MainThread
+                                OperationQueue.main.addOperation {
+                                    cell.message.isHidden = true
+                                    tableView.reloadData()
+                                }
+                            }
+                            catch let error {
+                                print("Error : ", error.localizedDescription)
+                            }
+                        }
+                    }
+                    
+                }else{
+                    cell.messageBackground.image = message[indexPath.row].image!
+                    cell.message.isHidden = true
+                }
+            }else{
                 cell.message.text = message[indexPath.row].text
+            }
             return cell
             }
     }
@@ -251,12 +337,12 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
         self.fetchData()
     }
     
-    func messageUpload(txt : String, time : Int){
+    func messageUpload(txt : String, time : Int, type : String, url : String){
         let ref = FIRDatabase.database().reference().child("message").child(channel!)
         let childRef = ref.childByAutoId()
         let fromUid = FIRAuth.auth()!.currentUser!.uid
         let timeStamp = Int(NSDate().timeIntervalSince1970)
-        let value = [ sv.text: txt, sv.toUid : toUid!, sv.fromUid : fromUid, sv.time : timeStamp] as [String : Any]
+        let value = [ sv.text: txt, sv.toUid : toUid!, sv.fromUid : fromUid, sv.time : timeStamp, sv.type : type, sv.url : url] as [String : Any]
         childRef.updateChildValues(value)
         
     }

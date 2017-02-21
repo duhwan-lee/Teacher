@@ -12,33 +12,44 @@ import ReplayKit
 import MobileCoreServices
 import Firebase
 
-class Tc07RecordViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate, CustomPalettViewDelegate, RPScreenRecorderDelegate,
+class Tc07RecordViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CustomPalettViewDelegate, RPScreenRecorderDelegate,
 RPPreviewViewControllerDelegate {
     
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var borderView: UIView!
     var content_Number : String?
     var penWidth : CGFloat = 2.0
     var palett : CustomPalettView?
     var dialog : UIAlertController!
-    var textview : UITextView!
-    var answer_tex : String = ""
     var click = true
     var imageFlag = false
     var drawFlag = false
     let recorder = RPScreenRecorder.shared()
     let writer = (FIRAuth.auth()?.currentUser?.uid)! as String
 
+    @IBOutlet weak var undoButton: UIBarButtonItem!
+    @IBOutlet weak var clearButton: UIBarButtonItem!
     @IBOutlet weak var ImagecontainView: UIView!
     @IBOutlet weak var drawview: TouchDrawView!
     @IBOutlet weak var mergeView: UIView!
     @IBOutlet weak var recordButton: UIBarButtonItem!
     @IBOutlet weak var videoUpload: UIBarButtonItem!
+    
+    @IBAction func clearAction(_ sender: Any) {
+        drawview.clearDrawing()
+    }
+    
+    @IBAction func undoAction(_ sender: Any) {
+        drawview.undo()
+    }
+    
     @IBAction func imageUploadAction(_ sender: Any) {
-        if answer_tex == "" {
-            let dialog = UIAlertController(title: "업로드 확인", message: "제목이 없습니다.\n제목을 입력해주세요", preferredStyle: .alert)
+        
+        if textView.text.isEmpty {
+            let dialog = UIAlertController(title: "업로드 확인", message: "본문이 없습니다.\n본문을 입력해주세요", preferredStyle: .alert)
             
             
             let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-                self.textAction("aa")
             }
             
             dialog.addAction(okAction)
@@ -46,38 +57,36 @@ RPPreviewViewControllerDelegate {
             self.present(dialog, animated: true, completion: nil)
             return
         }
-        if !drawFlag, !imageFlag {
-            let dialog = UIAlertController(title: "업로드 확인", message: "텍스트만 답변하시겠습니까?", preferredStyle: .alert)
+        
+        let dialog = UIAlertController(title: "업로드 확인", message: "업로드 내용을 선택해주세요", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (UIAlertAction) in
             
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action) in
-                
-            })
-            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-                let timestamp = Int(NSDate().timeIntervalSince1970)
+        }
+        dialog.addAction(cancelAction)
+        let okAction = UIAlertAction(title: "동영상", style: .default) { (action) in
+            let imagepicker = UIImagePickerController()
+            imagepicker.delegate = self
+            imagepicker.mediaTypes = [kUTTypeMovie as String]
+            self.present(imagepicker, animated: true, completion: nil)
+        }
+        let timestamp = Int(NSDate().timeIntervalSince1970)
+
+        if !drawFlag, !imageFlag {
+            let textAction = UIAlertAction(title: "텍스트", style: .default, handler: { (action) in
                 let ref = FIRDatabase.database().reference().child("Question").child(self.content_Number!).child("answer").childByAutoId()
-                let value = ["text" : self.answer_tex, "type" : "text", "content" : "null", "writer" : self.writer, "time" : timestamp] as [String : Any]
+                let value = ["text" : self.textView.text, "type" : "text", "content" : "null", "writer" : self.writer, "time" : timestamp] as [String : Any]
                 ref.updateChildValues(value)
                 self.dismiss(animated: true, completion: nil)
-            }
-            dialog.addAction(cancelAction)
-            dialog.addAction(okAction)
-            
-            self.present(dialog, animated: true, completion: nil)
-        }else{
-            
-            let dialog = UIAlertController(title: "업로드 확인", message: "현재 화면으로 답변하시겠습니까?", preferredStyle: .alert)
-            
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action) in
-                
             })
-            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+            dialog.addAction(textAction)
+        }else{
+            let imageAction = UIAlertAction(title: "이미지", style: .default, handler: { (action) in
                 UIGraphicsBeginImageContext(self.mergeView.frame.size) // 이미지 context 생성
                 self.mergeView.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
                 let mergeImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()! //현재 image context -> UIImage로 저장
                 UIGraphicsEndImageContext()
-                let timestamp = Int(NSDate().timeIntervalSince1970)
                 let filename = (FIRAuth.auth()?.currentUser?.uid)! + String(timestamp) + ".png"
-                
                 let storage = FIRStorage.storage().reference().child("Answer").child("Photo").child(filename)
                 if let uploadImage = UIImagePNGRepresentation(mergeImage){
                     storage.put(uploadImage, metadata: nil, completion: { (metadata, error) in
@@ -88,7 +97,7 @@ RPPreviewViewControllerDelegate {
                         }else{
                             if let downUrl = metadata?.downloadURL()?.absoluteString{
                                 let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
-                                let value = ["text" : self.answer_tex, "type" : "photo", "content" : downUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
+                                let value = ["text" : self.textView.text, "type" : "photo", "content" : downUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                                 ref.updateChildValues(value)
                                 self.dismiss(animated: true, completion: nil)
                             }
@@ -96,32 +105,17 @@ RPPreviewViewControllerDelegate {
                         }
                     })
                 }
-            }
-            dialog.addAction(cancelAction)
-            dialog.addAction(okAction)
-            
-            self.present(dialog, animated: true, completion: nil)
+            })
+            dialog.addAction(imageAction)
         }
+        
+        
+        dialog.addAction(okAction)
+        
+        self.present(dialog, animated: true, completion: nil)
+        return
     }
-    @IBAction func vedioUploadAction(_ sender: Any) {
-        if answer_tex == "" {
-            let dialog = UIAlertController(title: "업로드 확인", message: "제목이 없습니다.\n제목을 입력해주세요", preferredStyle: .alert)
-            
-            
-            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-                self.textAction("aa")
-            }
-            
-            dialog.addAction(okAction)
-            
-            self.present(dialog, animated: true, completion: nil)
-            return
-        }
-        let imagepicker = UIImagePickerController()
-        imagepicker.delegate = self
-        imagepicker.mediaTypes = [kUTTypeMovie as String]
-        present(imagepicker, animated: true, completion: nil)
-    }
+    
     @IBAction func cancelAction(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
     }
@@ -130,18 +124,18 @@ RPPreviewViewControllerDelegate {
     @IBAction func recordAction(_ sender: Any) {
         if click {
             click = false
-            recordButton.title = "중지"
             if recorder.isAvailable {
+                recordButton.image = #imageLiteral(resourceName: "stop")
                 recorder.startRecording(withMicrophoneEnabled: true){err in
                     print (err.debugDescription)
                 }
             }else{
                 click = true
-                recordButton.title = "녹화"
+                recordButton.image = #imageLiteral(resourceName: "video-camera")
             }
         }else{
             click = true
-            recordButton.title = "녹화"
+            recordButton.image = #imageLiteral(resourceName: "video-camera")
             recorder.stopRecording{controller, err in
                 guard let previewController = controller, err == nil else {
                 print("Failed to stop recording")
@@ -213,7 +207,7 @@ RPPreviewViewControllerDelegate {
                         }
                         if let storageUrl = metadata?.downloadURL()?.absoluteString{
                         let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
-                            let value = ["text" : self.answer_tex, "type" : "video", "content" : storageUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
+                            let value = ["text" : self.textView.text, "type" : "video", "content" : storageUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                             ref.updateChildValues(value)
                             self.dismiss(animated: true, completion: nil)
 
@@ -302,31 +296,6 @@ RPPreviewViewControllerDelegate {
         self.present(dialog, animated: true, completion: nil)
     }
     
-    @IBAction func textAction(_ sender: Any) {
-        dialog = UIAlertController(title: "\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
-        let margin:CGFloat = 8.0
-        let rect = CGRect(x: margin, y: margin, width: dialog.view.bounds.size.width - margin * 4.0, height: 100.0)
-        textview = UITextView(frame: rect)
-        
-        textview.backgroundColor = UIColor.clear
-        textview.font = UIFont(name: "Helvetica", size: 15)
-        
-        //  customView.backgroundColor = UIColor.greenColor()
-        textview.text = answer_tex
-        dialog.view.addSubview(textview)
-        
-        let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-            self.answer_tex = self.textview.text!
-        }
-        dialog.addAction(okAction)
-        
-        
-        if let popvc = dialog.popoverPresentationController{
-            popvc.sourceView = self.view
-        }
-        
-        self.present(dialog, animated: true, completion: nil)
-    }
     func setColor(color: UIColor) {
         drawview.setColor(color)
         self.dismiss(animated: true, completion: nil)
@@ -335,20 +304,7 @@ RPPreviewViewControllerDelegate {
         penWidth = CGFloat(width)
         drawview.setWidth(penWidth)
     }
-    func setUndo(){
-        drawview.undo()
-    }
-    func setClear(){
-        drawview.clearDrawing()
-        self.dismiss(animated: true, completion: nil)
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() //키보드 return값 설정
-        return true
-    }
-    
-    
-    
+
     
     
     override func viewDidLoad() {
@@ -360,6 +316,14 @@ RPPreviewViewControllerDelegate {
 
         drawview.setWidth(2.0)
         drawview.backgroundColor = UIColor(white: 1, alpha: 0.0)
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width , height: 1)
+        topBorder.backgroundColor = UIColor.gray.cgColor
+        borderView.layer.addSublayer(topBorder)
+        
+        undoButton.isEnabled = false
+        clearButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -372,11 +336,11 @@ RPPreviewViewControllerDelegate {
         return true
     }
     func undoEnabled() {
-        palett?.undoButton.isEnabled = true
+        undoButton.isEnabled = true
     }
     
     func undoDisabled() {
-        palett?.undoButton.isEnabled = false
+        undoButton.isEnabled = false
     }
     
     func redoEnabled() {
@@ -387,10 +351,12 @@ RPPreviewViewControllerDelegate {
     
     func clearEnabled() {
         drawFlag = true
+        clearButton.isEnabled = true
     }
     
     func clearDisabled() {
         drawFlag = false
+        clearButton.isEnabled = false
     }
     func imageWithImage (sourceImage:UIImage, scaledToWidth: CGFloat) -> UIImage {
         let oldWidth = sourceImage.size.width
@@ -408,3 +374,4 @@ RPPreviewViewControllerDelegate {
 
 
 }
+

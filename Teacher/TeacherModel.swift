@@ -25,12 +25,16 @@ class Question : NSObject{
     var writerName : String?
     var writeTime : String?
     var contentNumber : String?
+    var tag : [String]?
 }
 class Message: NSObject{
     var text : String?
     var time : Int?
     var toUid : String?
     var fromUiD : String?
+    var type : String?
+    var url : String?
+    var image : UIImage?
 }
 class Channel : NSObject {
     var channel_name : String?
@@ -51,6 +55,8 @@ class sendValue {
     let time = "timeStamp"
     let toUid = "toUid"
     let fromUid = "fromUid"
+    let type = "type"
+    let url = "url"
 }
 
 struct Section {

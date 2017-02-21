@@ -153,6 +153,9 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                 self.present(dialog, animated: true, completion: nil)
                 return
         }
+        let stringArr = textView.text.components(separatedBy: " ")
+        let hashArr = stringArr.filter { $0.contains("#")}
+        print(hashArr)
         
         let uid = (FIRAuth.auth()?.currentUser?.uid)! as String
         let name = (FIRAuth.auth()?.currentUser?.displayName)! as String
@@ -166,7 +169,10 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
             let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
                 let ref = FIRDatabase.database().reference()
                 let userReference = ref.child("Question").childByAutoId()
-                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : "null", "writerName" : name, "writeTime": timestamp, "category" : self.cate!] as [String : Any]
+                var value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : "null", "writerName" : name, "writeTime": timestamp, "category" : self.cate!] as [String : Any]
+                if !hashArr.isEmpty {
+                    value["tag"] = hashArr
+                }
                 userReference.updateChildValues(value)
                 self.dismiss(animated: true, completion: nil)
             }
@@ -204,7 +210,10 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                             if let downUrl = metadata?.downloadURL()?.absoluteString{
                                 let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/")
                                 let userReference = ref.child("Question").childByAutoId()
-                                let value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : downUrl, "writerName" : name, "writeTime": timestamp, "category" : self.cate!] as [String : Any]
+                                var value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : downUrl, "writerName" : name, "writeTime": timestamp, "category" : self.cate!] as [String : Any]
+                                if !hashArr.isEmpty {
+                                    value["tag"] = hashArr
+                                }
                                 userReference.updateChildValues(value)
                                 self.dismiss(animated: true, completion: nil)
                             }

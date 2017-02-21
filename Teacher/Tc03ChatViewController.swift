@@ -18,9 +18,10 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "채팅"
-    loadData()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        loadData()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -79,15 +80,14 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func loadData(){
+  chArr.removeAll()
+
         if let uid = FIRAuth.auth()?.currentUser?.uid {
             let ref = FIRDatabase.database().reference().child("Users").child(uid).child("channel")
             ref.observe(.childAdded, with: { (FIRDataSnapshot) in
                 let ch = Channel()
                 ch.channel_name = FIRDataSnapshot.key
                 ch.uid = ch.channel_name?.replacingOccurrences(of: (FIRAuth.auth()?.currentUser?.uid)!, with: "")
-                
-                
-                
                 if let dictionary = FIRDataSnapshot.value as? [String : Any]{
                     ch.text = dictionary["lastText"] as? String
                     

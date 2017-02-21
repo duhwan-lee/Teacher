@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, categoryDelegate {
+class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, categoryDelegate, UISearchBarDelegate {
 
     @IBOutlet var mainView: UIView!
     @IBOutlet weak var search: UISearchBar!
@@ -17,8 +17,39 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     var question = [Question]()
     var question_all = [Question]()
     var question_temp = [Question]()
+    var question_search = [Question]()
     var queue = OperationQueue()
-   
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if searchBar.text != nil{
+            let searchText : String?
+            if searchBar.text?.characters.first == "#"{
+                searchText = searchBar.text!
+            }else{
+                searchText = "#"+searchBar.text!
+            }
+            question_search.removeAll()
+            for searchQa in question_all{
+                if searchQa.tag != nil {
+                    if searchQa.tag!.contains(searchText!) {
+                        question_search.append(searchQa)
+                    }
+                }
+                
+            }
+            question = question_search
+            tableView.reloadData()
+        }
+        
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty{
+            question = question_all
+            tableView.reloadData()
+        }
+    }
+    
+    
     func categorySearch(cate : String){
         if cate == "전체" {
             self.question = self.question_all
@@ -29,7 +60,6 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             self.question_temp.removeAll()
             FIRDatabase.database().reference().child("Question").queryOrdered(byChild: "category").queryEqual(toValue: tc_category_dic[cate]!).observeSingleEvent(of: .childAdded, with: { (FIRDataSnapshot) in
                 if let dictionary = FIRDataSnapshot.value as? [String : Any]{
-                    print("123")
                     let qa = Question()
                     qa.contentNumber = FIRDataSnapshot.key
                     qa.questionText = dictionary["questionText"] as! String?
@@ -85,6 +115,9 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 if let ans = dictionary["answer"] as? [String: Any]{
                     qa.answerCount = Array(ans.keys).count
+                }
+                if let tag = dictionary["tag"] as? [String]{
+                    qa.tag = tag
                 }
                 
                 self.question_all.append(qa)

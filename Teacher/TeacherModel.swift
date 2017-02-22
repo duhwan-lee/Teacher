@@ -74,3 +74,27 @@ struct Section {
 
 let tc_category_dic = ["고1 수학" : "tc_h1_m" ,"고2 수학" : "tc_h2_m", "고3 수학" : "tc_h3_m" , "수능영어" : " tc_h_e"]
 let tc_category = ["전체", "고1 수학", "고2 수학", "고3 수학","수능영어"]
+
+
+class IndicatorHelper{
+    var indicator: UIActivityIndicatorView!
+    init(view: UIView){
+        self.indicator = UIActivityIndicatorView()
+        self.indicator.frame = CGRect(x:0.0, y:0.0, width:40.0, height:40.0)
+        self.indicator.center = view.center
+        self.indicator.hidesWhenStopped = true
+        self.indicator.
+        self.indicator.activityIndicatorViewStyle =
+            UIActivityIndicatorViewStyle.gray
+        view.addSubview(self.indicator)
+    }
+    
+    func start(){
+        self.indicator.startAnimating()
+    }
+    
+    func stop(){
+        self.indicator.stopAnimating()
+        self.indicator.removeFromSuperview()
+    }
+}

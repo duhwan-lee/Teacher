@@ -17,6 +17,8 @@
 		8753A0F91E5184B5001D53B2 /* CollapsibleTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753A0F81E5184B5001D53B2 /* CollapsibleTableViewHeader.swift */; };
 		8753A0FC1E518DC6001D53B2 /* Tc07RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753A0FB1E518DC6001D53B2 /* Tc07RecordViewController.swift */; };
 		8753A0FE1E52DA7A001D53B2 /* Tc06AnswerVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753A0FD1E52DA7A001D53B2 /* Tc06AnswerVideoViewController.swift */; };
+		8756F7D71E5D52E000684E53 /* BMDOHYEON_otf.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8756F7D61E5D52E000684E53 /* BMDOHYEON_otf.otf */; };
+		8756F7D91E5D6CE600684E53 /* Tc10ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8756F7D81E5D6CE600684E53 /* Tc10ImageViewController.swift */; };
 		875C99271E53EC6C002A62AE /* Tc06AnswerPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875C99261E53EC6C002A62AE /* Tc06AnswerPhotoViewController.swift */; };
 		875C99291E53ED39002A62AE /* Tc04MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875C99281E53ED39002A62AE /* Tc04MyViewController.swift */; };
 		875C992B1E53FA1B002A62AE /* Tc09SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875C992A1E53FA1B002A62AE /* Tc09SettingViewController.swift */; };
@@ -50,6 +52,8 @@
 		8753A0F81E5184B5001D53B2 /* CollapsibleTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleTableViewHeader.swift; sourceTree = "<group>"; };
 		8753A0FB1E518DC6001D53B2 /* Tc07RecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc07RecordViewController.swift; sourceTree = "<group>"; };
 		8753A0FD1E52DA7A001D53B2 /* Tc06AnswerVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc06AnswerVideoViewController.swift; sourceTree = "<group>"; };
+		8756F7D61E5D52E000684E53 /* BMDOHYEON_otf.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BMDOHYEON_otf.otf; sourceTree = "<group>"; };
+		8756F7D81E5D6CE600684E53 /* Tc10ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc10ImageViewController.swift; sourceTree = "<group>"; };
 		875C99261E53EC6C002A62AE /* Tc06AnswerPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc06AnswerPhotoViewController.swift; sourceTree = "<group>"; };
 		875C99281E53ED39002A62AE /* Tc04MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc04MyViewController.swift; sourceTree = "<group>"; };
 		875C992A1E53FA1B002A62AE /* Tc09SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc09SettingViewController.swift; sourceTree = "<group>"; };
@@ -71,7 +75,6 @@
 		8784FA6F1E49BB7000C3929E /* Tc01categoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc01categoryViewController.swift; sourceTree = "<group>"; };
 		8784FA711E49C2E100C3929E /* Tc05ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc05ContentViewController.swift; sourceTree = "<group>"; };
 		8784FA731E49F50A00C3929E /* Tc02extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tc02extension.swift; sourceTree = "<group>"; };
-		87ECF7A81E54261400A9D664 /* cit02a167qh.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cit02a167qh.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +128,7 @@
 		8718C1DE1E4C5018007AB054 /* SupporFile */ = {
 			isa = PBXGroup;
 			children = (
-				87ECF7A81E54261400A9D664 /* cit02a167qh.ttf */,
+				8756F7D61E5D52E000684E53 /* BMDOHYEON_otf.otf */,
 				875F2B751E480CF800FE958F /* Info.plist */,
 				875F2B7B1E480E7700FE958F /* GoogleService-Info.plist */,
 				875F2B721E480CF800FE958F /* LaunchScreen.storyboard */,
@@ -196,6 +199,7 @@
 				875F2B6D1E480CF800FE958F /* Main.storyboard */,
 				875F2B831E48198800FE958F /* Teacher-Bridging-Header.h */,
 				875F2B7F1E48178B00FE958F /* TcAuthViewController.swift */,
+				8756F7D81E5D6CE600684E53 /* Tc10ImageViewController.swift */,
 				8718C1D91E4C3B27007AB054 /* Tc01 */,
 				8718C1DF1E4C503B007AB054 /* Tc02 */,
 				8753A0F31E514344001D53B2 /* Tc03-08 */,
@@ -275,6 +279,7 @@
 				875F2B711E480CF800FE958F /* Assets.xcassets in Resources */,
 				870C71041E4A03D500DE211D /* CustomPalettView.xib in Resources */,
 				875F2B6F1E480CF800FE958F /* Main.storyboard in Resources */,
+				8756F7D71E5D52E000684E53 /* BMDOHYEON_otf.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				875E57C31E5033A300B644A7 /* Tc08ChatRoomViewController.swift in Sources */,
+				8756F7D91E5D6CE600684E53 /* Tc10ImageViewController.swift in Sources */,
 				875E57C51E5033AA00B644A7 /* Tc08TableViewCell.swift in Sources */,
 				8753A0F91E5184B5001D53B2 /* CollapsibleTableViewHeader.swift in Sources */,
 				8784FA721E49C2E100C3929E /* Tc05ContentViewController.swift in Sources */,

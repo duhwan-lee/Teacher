@@ -15,4 +15,5 @@ target 'Teacher' do
  pod 'TouchDraw', '~> 2.0'
  pod 'BMPlayer'
  pod 'ActionSheetPicker-3.0'
+ pod 'KMPlaceholderTextView', '~> 1.3.0'
 end

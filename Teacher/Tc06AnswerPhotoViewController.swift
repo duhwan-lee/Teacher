@@ -17,7 +17,9 @@ class Tc06AnswerPhotoViewController: UIViewController {
     var type : String?
     var writer : String?
     var queue = OperationQueue()
-    
+    let image_recognizer = UITapGestureRecognizer()
+    let recognizer = UITapGestureRecognizer()
+
     @IBOutlet weak var answerText: UITextView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var userImage: RoundedImageView!
@@ -26,10 +28,15 @@ class Tc06AnswerPhotoViewController: UIViewController {
     @IBAction func cancelAction(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
     }
-    
+    func imageTapped(){
+        let vc = self.storyboard?.instantiateViewController(withIdentifier:"image_vc") as! Tc10ImageViewController
+        vc.image = AnswerImage.image
+        self.present(vc, animated: true)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         if type == "text"{
             imageHeight.constant = 0
         }else{
@@ -39,6 +46,9 @@ class Tc06AnswerPhotoViewController: UIViewController {
                     let image = UIImage(data:data) {
                     OperationQueue.main.addOperation {
                         self.AnswerImage.image = image
+                        self.AnswerImage.isUserInteractionEnabled = true
+                        self.image_recognizer.addTarget(self, action: #selector(Tc06AnswerPhotoViewController.imageTapped))
+                        self.AnswerImage.addGestureRecognizer(self.image_recognizer)
                     }
                 }
             }

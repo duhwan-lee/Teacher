@@ -11,6 +11,7 @@ import Firebase
 
 class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var borderView: UIView!
     @IBOutlet weak var messageButton: UIButton!
     @IBOutlet weak var questionCount: UILabel!
     @IBOutlet weak var answerCount: UILabel!
@@ -113,8 +114,8 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         tableView.estimatedRowHeight = 1000
         tableView.rowHeight = UITableViewAutomaticDimension
-
         super.viewDidLoad()
+        
         
     }
 
@@ -129,10 +130,10 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                         if let dic_temp = FIRDataSnapshot_key.value as? [String : Any]{
                             self.question_ans.removeAll()
                             for key in strArr{
-                                
                                 if let dic_ans = dic_temp[key] as? [String : Any] {
                                     let qa = Question()
-                                    qa.contentNumber = FIRDataSnapshot.key
+                                    //qa.contentNumber = dic_ans.key
+                                    qa.contentNumber = key
                                     qa.questionText = dic_ans["questionText"] as! String?
                                     qa.writerUid = dic_ans["writerUid"] as! String?
                                     qa.writerName = dic_ans["writerName"] as! String?
@@ -143,7 +144,7 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                                     let dateFormatter = DateFormatter()
                                     dateFormatter.dateFormat = "yyyy-MM-dd a hh:mm:ss"
                                     qa.writeTime = dateFormatter.string(from: timestampDate as Date)
-                                    if let ans = dictionary["answer"] as? [String: Any]{
+                                    if let ans = dic_ans["answer"] as? [String: Any]{
                                         qa.answerCount = Array(ans.keys).count
                                     }
                                     self.question_ans.append(qa)
@@ -295,7 +296,10 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 
                 if let ans = dictionary["answer"] as? [String: Any]{
+                    print(ans)
                     qa.answerCount = Array(ans.keys).count
+                }else{
+                    qa.answerCount = 0
                 }
                 
                 self.question_qa.append(qa)

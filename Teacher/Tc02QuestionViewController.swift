@@ -293,6 +293,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     override func viewWillDisappear(_ animated: Bool) {
         unsubscribeFromKeyboardNotifications()
     }
+
     func keyboardWillShow(_ noti : Notification){
         
         if let rectObj = noti.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue, textView.isFirstResponder

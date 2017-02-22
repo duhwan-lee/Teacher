@@ -241,6 +241,64 @@ RPPreviewViewControllerDelegate {
         }
 
     }
+    func keyboardWillShow(_ noti : Notification){
+        
+        if let rectObj = noti.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue, textView.isFirstResponder
+        {
+            // 키보드 높이 가져옴
+            let keyboardRect = rectObj.cgRectValue
+            // 키보드 높이 만큼 화면 밀기
+            self.view.frame.origin.y = 0 - keyboardRect.height
+        }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        subscribeToKeyboardNotifications()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        unsubscribeFromKeyboardNotifications()
+    }
+    func subscribeToKeyboardNotifications() {
+        //키보드 나타남
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        //키보드 들어감
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    func unsubscribeFromKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    func keyboardWillHide(_ noti : Notification){
+        self.view.frame.origin.y = 0
+    }
+    func makeCloseButton(){
+        let buttonView: UIView = UIView()
+        let viewWidth: CGFloat = self.view.bounds.size.width
+        let viewHeight: CGFloat = 44
+        let viewRect: CGRect = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        buttonView.frame = viewRect
+        buttonView.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        
+        let closeButton: UIButton = UIButton(type: UIButtonType.system)
+        let buttonWidth: CGFloat = 60
+        let buttonHeight: CGFloat = 30
+        let buttonRect: CGRect = CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight)
+        closeButton.bounds = buttonRect
+        let buttonMargin: CGFloat = 10
+        let buttonCenterX = self.view.bounds.size.width - buttonMargin - buttonWidth / 2
+        let buttonCenterY = buttonView.bounds.size.height / 2
+        let buttonCenter = CGPoint(x: buttonCenterX, y: buttonCenterY)
+        closeButton.center = buttonCenter
+        closeButton.setTitle("Close", for: UIControlState())
+        
+        closeButton.addTarget(self, action: #selector(Tc07RecordViewController.closeKeyboard), for: UIControlEvents.touchUpInside)
+        
+        buttonView.addSubview(closeButton)
+        
+        self.textView.inputAccessoryView = buttonView
+    }
+    func closeKeyboard(){
+        self.textView.resignFirstResponder()
+    }
     @IBAction func imagePicAction(_ sender: Any) {
         let dialog = UIAlertController(title: "이미지 선택", message: nil, preferredStyle: .actionSheet)
         let imagePicker = UIImagePickerController()
@@ -322,6 +380,7 @@ RPPreviewViewControllerDelegate {
         topBorder.backgroundColor = UIColor.gray.cgColor
         borderView.layer.addSublayer(topBorder)
         
+        makeCloseButton()
         undoButton.isEnabled = false
         clearButton.isEnabled = false
     }

@@ -21,6 +21,8 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     var typeArr = [String]()
     var keyArr = [String]()
     var answers = [Answer]()
+    let image_recognizer = UITapGestureRecognizer()
+
     let recognizer = UITapGestureRecognizer()
     @IBOutlet weak var cellHeight: NSLayoutConstraint!
     @IBOutlet weak var questionPic: UIImageView!
@@ -41,6 +43,12 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
     }
+    func imageTapped(){
+        let vc = self.storyboard?.instantiateViewController(withIdentifier:"image_vc") as! Tc10ImageViewController
+        vc.image = questionPic.image
+        self.present(vc, animated: true)
+    }
+    
     func profileImageHasBeenTapped(){
         if FIRAuth.auth()?.currentUser == nil {
             let vc = self.storyboard?.instantiateViewController(withIdentifier:"auth_vc") as! TcAuthViewController
@@ -62,7 +70,17 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
         self.title = "질문보기"
         recognizer.addTarget(self, action: #selector(Tc05ContentViewController.profileImageHasBeenTapped))
         writerPic.addGestureRecognizer(recognizer)
-
+        
+        questionPic.isUserInteractionEnabled = true
+        image_recognizer.addTarget(self, action: #selector(Tc05ContentViewController.imageTapped))
+        questionPic.addGestureRecognizer(image_recognizer)
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width , height: 1)
+        topBorder.backgroundColor = UIColor.gray.cgColor
+        questionPic.layer.addSublayer(topBorder)
+        
+        
         if let uid = writer_Uid {
             let user_ref=FIRDatabase.database().reference().child("Users").child(uid)
             user_ref.observe(.value, with: { (userSnapshot) in

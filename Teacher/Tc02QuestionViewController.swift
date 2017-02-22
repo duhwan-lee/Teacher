@@ -34,6 +34,8 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     var palett : CustomPalettView?
     var imageFlag = false
     var drawFlag = false
+    var indicator : IndicatorHelper?
+
     @IBAction func cancleAction(_ sender: Any) {
     self.dismiss(animated: true, completion: nil)
     }
@@ -175,6 +177,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                 
             })
             let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+                self.indicator?.start()
                 let ref = FIRDatabase.database().reference()
                 let userReference = ref.child("Question").childByAutoId()
                 var value : Dictionary = ["questionText" : self.textView.text , "writerUid": uid, "questionPic" : "null", "writerName" : name, "writeTime": timestamp, "category" : self.cate!] as [String : Any]
@@ -182,6 +185,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                     value["tag"] = hashArr
                 }
                 userReference.updateChildValues(value)
+                self.indicator?.stop()
                 self.dismiss(animated: true, completion: nil)
             }
             dialog.addAction(cancelAction)
@@ -189,14 +193,13 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
             
             self.present(dialog, animated: true, completion: nil)
         }else{
-            
             let dialog = UIAlertController(title: "업로드 확인", message: "구분 : \(self.cateName!)\n입력하신 내용으로 질문하시겠습니까?", preferredStyle: .alert)
             
             let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: { (action) in
                 
             })
             let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-
+                self.indicator?.start()
                 UIGraphicsBeginImageContext(self.mergeView.frame.size) // 이미지 context 생성
 
                 self.mergeView.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
@@ -223,6 +226,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                                     value["tag"] = hashArr
                                 }
                                 userReference.updateChildValues(value)
+                                self.indicator?.stop()
                                 self.dismiss(animated: true, completion: nil)
                             }
                             
@@ -244,16 +248,14 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{ //수정되지 않은 이미지 선택
             if picker.sourceType == .camera { //if camera
-                //imageView.image = image
-                let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
-                    imageview.image = image
-                //let imageview = UIImageView(image: image)
+                let newimage = imageWithImage(sourceImage: image, scaledToWidth: self.ImageContainView.frame.width )
+                let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: ImageContainView.frame.width, height: newimage.size.height))
+                imageview.image = newimage
                 
                 ImageContainView.addSubview(imageview)
                 imageFlag = true
                 dismiss(animated: true, completion: nil)
             }else{
-                //imageView.image = image
                 let newimage = imageWithImage(sourceImage: image, scaledToWidth: self.ImageContainView.frame.width )
                 let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: ImageContainView.frame.width, height: newimage.size.height))
                 imageview.image = newimage
@@ -278,6 +280,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         makeCloseButton()
         undoButton.isEnabled = false
         clearButton.isEnabled = false
+        indicator = IndicatorHelper(view: self.view)
         
     }
     

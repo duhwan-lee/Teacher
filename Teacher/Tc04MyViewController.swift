@@ -139,6 +139,11 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                                     qa.writerName = dic_ans["writerName"] as! String?
                                     qa.questionPic = dic_ans["questionPic"] as! String?
 
+                                    if let tag = dic_ans["tag"] as? [String]{
+                                        let joiner = " "
+                                        qa.tagLabel = tag.joined(separator: joiner)
+                                        qa.tag = tag
+                                    }
                                     let seconds = dic_ans["writeTime"] as! Int
                                     let timestampDate = NSDate(timeIntervalSince1970: TimeInterval(seconds))
                                     let dateFormatter = DateFormatter()
@@ -186,7 +191,9 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             cell.QuestionTextLabel.text = question[indexPath.row].questionText
             cell.writerName.text = question[indexPath.row].writerName
             cell.writeTime.text = question[indexPath.row].writeTime
-            //
+            if let taglabel = question[indexPath.row].tagLabel{
+                cell.writeTag.text = taglabel
+            }
             cell.backgroundColor = UIColor.clear
             self.queue.addOperation {
                 if let url = URL(string: self.question[indexPath.row].questionPic!),
@@ -219,7 +226,9 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             cell.QuestionTextLabel.text = question[indexPath.row].questionText
             cell.writerName.text = question[indexPath.row].writerName
             cell.writeTime.text = question[indexPath.row].writeTime
-            
+            if let taglabel = question[indexPath.row].tagLabel{
+                cell.writeTag.text = taglabel
+            }
             
             if let num = question[indexPath.row].answerCount{
                 cell.answerCount.text = String(num)
@@ -294,7 +303,11 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 dateFormatter.dateFormat = "yyyy-MM-dd a hh:mm:ss"
                 qa.writeTime = dateFormatter.string(from: timestampDate as Date)
                 
-                
+                if let tag = dictionary["tag"] as? [String]{
+                    let joiner = " "
+                    qa.tagLabel = tag.joined(separator: joiner)
+                    qa.tag = tag
+                }
                 if let ans = dictionary["answer"] as? [String: Any]{
                     print(ans)
                     qa.answerCount = Array(ans.keys).count

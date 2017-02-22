@@ -26,6 +26,7 @@ RPPreviewViewControllerDelegate {
     var drawFlag = false
     let recorder = RPScreenRecorder.shared()
     let writer = (FIRAuth.auth()?.currentUser?.uid)! as String
+    var indicator : IndicatorHelper?
 
     @IBOutlet weak var undoButton: UIBarButtonItem!
     @IBOutlet weak var clearButton: UIBarButtonItem!
@@ -73,15 +74,19 @@ RPPreviewViewControllerDelegate {
         let timestamp = Int(NSDate().timeIntervalSince1970)
 
         if !drawFlag, !imageFlag {
-            let textAction = UIAlertAction(title: "텍스트", style: .default, handler: { (action) in
+            let textAction = UIAlertAction(title: "텍스트", style: .default, handler: {
+                (action) in
+                self.indicator?.start()
                 let ref = FIRDatabase.database().reference().child("Question").child(self.content_Number!).child("answer").childByAutoId()
                 let value = ["text" : self.textView.text, "type" : "text", "content" : "null", "writer" : self.writer, "time" : timestamp] as [String : Any]
                 ref.updateChildValues(value)
+                self.indicator?.stop()
                 self.dismiss(animated: true, completion: nil)
             })
             dialog.addAction(textAction)
         }else{
             let imageAction = UIAlertAction(title: "이미지", style: .default, handler: { (action) in
+                self.indicator?.start()
                 UIGraphicsBeginImageContext(self.mergeView.frame.size) // 이미지 context 생성
                 self.mergeView.drawHierarchy(in: self.mergeView.frame, afterScreenUpdates: true) //Snapshot 촬영후 현재 context에 저장
                 let mergeImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()! //현재 image context -> UIImage로 저장
@@ -99,6 +104,7 @@ RPPreviewViewControllerDelegate {
                                 let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
                                 let value = ["text" : self.textView.text, "type" : "photo", "content" : downUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                                 ref.updateChildValues(value)
+                                self.indicator?.stop()
                                 self.dismiss(animated: true, completion: nil)
                             }
                             
@@ -163,19 +169,7 @@ RPPreviewViewControllerDelegate {
         print(activityTypes.description)
     }
     
-//    func previewController(previewController: RPPreviewViewController,
-//                           didFinishWithActivityTypes activityTypes: Set<String>) {
-//        print("Preview finished activities \(activityTypes)")
-//        if activityTypes.contains("com.apple.UIKit.activity.SaveToCameraRoll") {
-//            // video has saved to camera roll
-//            print("a1a1a")
-//            videoUpload.isEnabled = true
-//        } else {
-//            // cancel
-//            print("b2b2b")
-//            videoUpload.isEnabled = false
-//        }
-//    }
+
     func screenRecorderDidChangeAvailability(_ screenRecorder: RPScreenRecorder) {
         print("Screen recording availability changed")
     }
@@ -199,6 +193,7 @@ RPPreviewViewControllerDelegate {
                 }
                 
                 let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+                    self.indicator?.start()
                     let timestamp = Int(NSDate().timeIntervalSince1970)
                     let filename = self.content_Number!+String(timestamp)+".mov"
                     FIRStorage.storage().reference().child("Answer").child("Video").child(filename).putFile(videoUrl as! URL, metadata: nil, completion: { (metadata, error) in
@@ -209,6 +204,7 @@ RPPreviewViewControllerDelegate {
                         let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
                             let value = ["text" : self.textView.text, "type" : "video", "content" : storageUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                             ref.updateChildValues(value)
+                            self.indicator?.stop()
                             self.dismiss(animated: true, completion: nil)
 
                         }
@@ -374,7 +370,7 @@ RPPreviewViewControllerDelegate {
 
         drawview.setWidth(2.0)
         drawview.backgroundColor = UIColor(white: 1, alpha: 0.0)
-        
+        indicator = IndicatorHelper(view: self.view)
         let topBorder = CALayer()
         topBorder.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width , height: 1)
         topBorder.backgroundColor = UIColor.gray.cgColor

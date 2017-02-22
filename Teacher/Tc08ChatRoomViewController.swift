@@ -39,6 +39,8 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     var profileFlag = false
     var profileImg : UIImage?
     var queue = OperationQueue()
+    var indicator : IndicatorHelper?
+    var firstFlag = true
     @IBOutlet weak var viewTop: NSLayoutConstraint!
     @IBOutlet var inputBar: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -75,7 +77,6 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
         if (status == .authorized || status == .notDetermined) {
             self.imagePicker.sourceType = .camera
             self.imagePicker.allowsEditing = false
-            print("aaaaaaa")
             self.present(self.imagePicker, animated: true, completion: nil)
         }
     }
@@ -126,7 +127,6 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
         self.tableView.contentInset.bottom = self.barHeight
         self.tableView.scrollIndicatorInsets.bottom = self.barHeight
         self.navigationItem.title = toName
-        //self.navigationItem.setHidesBackButton(true, animated: false)
     }
     
     //Downloads messages
@@ -143,10 +143,14 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
                     msg.type = dictionary[self.sv.type] as? String
                     msg.url = dictionary[self.sv.url] as? String
                     
-                    
-                    
                     self.message.append(msg)
+                    let idx = IndexPath(row: self.message.count-1, section: 0)
                     self.tableView.reloadData()
+                    if self.firstFlag{
+                        self.tableView.scrollToRow(at: idx, at: .bottom, animated: false)
+                    }
+                    
+                    
                 }
             }, withCancel: nil)
         }
@@ -200,11 +204,13 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
 
     //MARK: Delegates
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(self.message.count)
         return self.message.count
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView.isDragging {
+            firstFlag = false
             cell.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
             UIView.animate(withDuration: 0.3, animations: {
                 cell.transform = CGAffineTransform.identity
@@ -238,6 +244,8 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
                 cell.clearCellData()
             if message[indexPath.row].type == "photo"{
                 if message[indexPath.row].image == nil {
+                    cell.messageBackground.image = #imageLiteral(resourceName: "img_not_available")
+                    cell.message.isHidden = true
                     if let url = URL(string: message[indexPath.row].url!){
                         queue.addOperation {
                             do {

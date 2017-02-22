@@ -26,6 +26,7 @@ class Question : NSObject{
     var writeTime : String?
     var contentNumber : String?
     var tag : [String]?
+    var tagLabel : String?
 }
 class Message: NSObject{
     var text : String?
@@ -80,12 +81,13 @@ class IndicatorHelper{
     var indicator: UIActivityIndicatorView!
     init(view: UIView){
         self.indicator = UIActivityIndicatorView()
-        self.indicator.frame = CGRect(x:0.0, y:0.0, width:40.0, height:40.0)
+        self.indicator.frame = CGRect(x:0.0, y:0.0, width:view.frame.size.width , height:view.frame.size.height)
+        self.indicator.alpha = 0.3
         self.indicator.center = view.center
         self.indicator.hidesWhenStopped = true
-        self.indicator.
+        self.indicator.backgroundColor = UIColor.gray
         self.indicator.activityIndicatorViewStyle =
-            UIActivityIndicatorViewStyle.gray
+            UIActivityIndicatorViewStyle.whiteLarge
         view.addSubview(self.indicator)
     }
     

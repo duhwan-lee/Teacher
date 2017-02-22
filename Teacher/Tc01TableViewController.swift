@@ -19,7 +19,7 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     var question_temp = [Question]()
     var question_search = [Question]()
     var queue = OperationQueue()
-    
+    var indicator : IndicatorHelper?
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if searchBar.text != nil{
             let searchText : String?
@@ -38,7 +38,9 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                 
             }
             question = question_search
+            let indexPath = IndexPath(row: 0, section: 0)
             tableView.reloadData()
+            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
         }
         
     }
@@ -91,12 +93,12 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
-
+        indicator = IndicatorHelper(view: self.view)
+        indicator?.start()
     
         search.barTintColor = UIColor(red: 0.58, green: 0.46, blue: 0.80, alpha: 1)
         tableView.estimatedRowHeight = 1000
         tableView.rowHeight = UITableViewAutomaticDimension
-        
         
         FIRDatabase.database().reference().child("Question").observe(.childAdded, with: { (FIRDataSnapshot) in
             if let dictionary = FIRDataSnapshot.value as? [String : Any]{
@@ -118,6 +120,8 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                     qa.answerCount = Array(ans.keys).count
                 }
                 if let tag = dictionary["tag"] as? [String]{
+                    let joiner = " "
+                    qa.tagLabel = tag.joined(separator: joiner)
                     qa.tag = tag
                 }
                 
@@ -126,6 +130,7 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                     self.question = self.question_all
                     DispatchQueue.main.async(execute: {
                         self.tableView.reloadData()
+                        self.indicator?.stop()
                     })
                 }
                 
@@ -158,7 +163,11 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.QuestionTextLabel.text = question[indexPath.row].questionText
             cell.writerName.text = question[indexPath.row].writerName
             cell.writeTime.text = question[indexPath.row].writeTime
-            //
+            
+            if let taglabel = question[indexPath.row].tagLabel{
+                cell.writeTag.text = taglabel
+            }
+            
             cell.backgroundColor = UIColor.clear
             self.queue.addOperation {
                 if let url = URL(string: self.question[indexPath.row].questionPic!),
@@ -191,7 +200,9 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.QuestionTextLabel.text = question[indexPath.row].questionText
             cell.writerName.text = question[indexPath.row].writerName
             cell.writeTime.text = question[indexPath.row].writeTime
-            
+            if let taglabel = question[indexPath.row].tagLabel{
+                cell.writeTag.text = taglabel
+            }
             
             if let num = question[indexPath.row].answerCount{
                 cell.answerCount.text = String(num)

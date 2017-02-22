@@ -16,4 +16,5 @@ target 'Teacher' do
  pod 'BMPlayer'
  pod 'ActionSheetPicker-3.0'
  pod 'KMPlaceholderTextView', '~> 1.3.0'
+ pod 'SwiftMessages'
 end

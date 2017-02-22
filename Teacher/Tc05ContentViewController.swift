@@ -30,12 +30,24 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
     
     @IBOutlet weak var writeTime: UILabel!
     @IBAction func answerAction(_ sender: Any) {
+        if FIRAuth.auth()?.currentUser == nil {
+            let vc = self.storyboard?.instantiateViewController(withIdentifier:"auth_vc") as! TcAuthViewController
+            vc.modalFlag = true
+            self.present(vc, animated: true)
+            return
+        }
         if (FIRAuth.auth()?.currentUser) != nil {
             performSegue(withIdentifier: "tc07_segue", sender: content_Number)
         }
         
     }
     func profileImageHasBeenTapped(){
+        if FIRAuth.auth()?.currentUser == nil {
+            let vc = self.storyboard?.instantiateViewController(withIdentifier:"auth_vc") as! TcAuthViewController
+            vc.modalFlag = true
+            self.present(vc, animated: true)
+            return
+        }
         if (FIRAuth.auth()?.currentUser) != nil {
             performSegue(withIdentifier: "tc04_segue", sender: nil)
         }
@@ -47,7 +59,7 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
         self.writerName.text = writer_Name
         self.writeTime.text = write_Time
         writerPic.isUserInteractionEnabled = true
-
+        self.title = "질문보기"
         recognizer.addTarget(self, action: #selector(Tc05ContentViewController.profileImageHasBeenTapped))
         writerPic.addGestureRecognizer(recognizer)
 
@@ -104,8 +116,9 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
                         answer_temp.type = (ansValue["type"] as! String)
                         answer_temp.url = (ansValue["content"] as! String)
                         answer_temp.text = (ansValue["text"] as! String)
+                        answer_temp.writer = (ansValue["writer"] as! String)
                         self.answers.append(answer_temp)
-                        //self.typeArr.append(ansValue["type"] as! String)
+                        
                     }
                     self.sections = [Section(count : ans.count, items : self.ansArr)]
                     self.tableview.reloadData()
@@ -211,6 +224,7 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
             photoVC.url = answers[idx].url
             photoVC.text = answers[idx].text
             photoVC.type = answers[idx].type
+            photoVC.writer = answers[idx].writer
         }
         
         if segue.identifier == "tc04_segue"{

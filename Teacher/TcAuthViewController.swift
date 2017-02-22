@@ -12,8 +12,12 @@ import Firebase
 class TcAuthViewController: UIViewController, GIDSignInUIDelegate , GIDSignInDelegate{
     
     //@IBOutlet weak var signInButton: GIDSignInButton!
-    
+    var modalFlag = false
     @IBAction func noLoginAction(_ sender: Any) {
+        if self.modalFlag {
+            self.dismiss(animated: true, completion: nil)
+            return
+        }
         let vc = self.storyboard?.instantiateViewController(withIdentifier:"tabView")
         self.show(vc!, sender: nil)
     }
@@ -39,6 +43,10 @@ class TcAuthViewController: UIViewController, GIDSignInUIDelegate , GIDSignInDel
         let credential = FIRGoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!,
                                                                      accessToken: (authentication?.accessToken)!)
         FIRAuth.auth()?.signIn(with: credential) { (user, error) in
+            if self.modalFlag {
+                self.dismiss(animated: true, completion: nil)
+                return
+            }
             let vc = self.storyboard?.instantiateViewController(withIdentifier:"tabView")
             self.show(vc!, sender: nil)
         }

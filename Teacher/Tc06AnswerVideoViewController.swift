@@ -25,6 +25,19 @@ class Tc06AnswerVideoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         playerView.playWithURL(URL(string: url!)!)
+        playerView.snp.makeConstraints { (make) in
+            make.top.equalTo(view.snp.top)
+            make.left.equalTo(view.snp.left)
+            make.right.equalTo(view.snp.right)
+            make.height.equalTo(view.snp.width).multipliedBy(9.0/16.0)
+        }
+        playerView.backBlock = { [unowned self] (isFullScreen) in
+            if isFullScreen == true {
+                return
+            }
+            let _ = self.navigationController?.popViewController(animated: true)
+        }
+        BMPlayerConf.shouldAutoPlay = false
     }
     
     override func didReceiveMemoryWarning() {

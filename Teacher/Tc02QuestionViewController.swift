@@ -127,6 +127,14 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         self.present(dialog, animated: true, completion: nil)
     }
     @IBAction func uploadAction(_ sender: Any) {
+        if FIRAuth.auth()?.currentUser == nil {
+            let vc = self.storyboard?.instantiateViewController(withIdentifier:"auth_vc") as! TcAuthViewController
+            vc.modalFlag = true
+            self.present(vc, animated: true)
+            return
+        }
+        
+        
         if textView.text.isEmpty {
             let dialog = UIAlertController(title: "업로드 확인", message: "본문이 없습니다.\n본문을 입력해주세요", preferredStyle: .alert)
             

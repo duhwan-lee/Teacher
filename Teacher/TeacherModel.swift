@@ -49,6 +49,7 @@ class Answer : NSObject {
     var text : String?
     var type : String?
     var url : String?
+    var writer : String?
 }
 class sendValue {
     let text = "text"

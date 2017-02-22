@@ -57,41 +57,21 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
         self.dismiss(animated: true, completion: nil)
     }
     override func viewWillAppear(_ animated: Bool) {
-        if modalFlag {
-            
-        }else{
-            
+        if FIRAuth.auth()?.currentUser == nil {
+            profileImg.image = nil 
+            questionCount.text = "0"
+            answerCount.text = "0"
+            question.removeAll()
+            tableView.reloadData()
         }
         
-
-    }
-    func scrollToTop() {
-        if (self.tableView.numberOfSections > 0 ) {
-            let top = NSIndexPath(row: Foundation.NSNotFound, section: 0)
-            self.tableView.scrollToRow(at: top as IndexPath, at: .top, animated: true);
-        }
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    override func viewDidLoad() {
-        tableView.estimatedRowHeight = 1000
-        tableView.rowHeight = UITableViewAutomaticDimension
-
-        super.viewDidLoad()
         if modalFlag {
             if uid == FIRAuth.auth()?.currentUser?.uid {
                 messageButton.isEnabled = false
                 messageButton.setTitleColor(UIColor.gray, for: UIControlState.normal)
             }
-            
-            viewTop.constant = 44
-            let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width , height: 44))
-            self.view.addSubview(navBar);
-            let navItem = UINavigationItem(title: "프로필");
-            let doneItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: nil, action: #selector(back));
-            navItem.leftBarButtonItem = doneItem;
-            navBar.setItems([navItem], animated: false);
+            self.title = "프로필"
+            navigationItem.rightBarButtonItem = nil
             modalAction(uid!)
             writeTextLoad(uid!)
             getAnswersKeys(uid!)
@@ -101,7 +81,7 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             self.title = "마이 페이지"
             let user = FIRAuth.auth()?.currentUser
             userName.text = user?.displayName
-
+            
             self.queue.addOperation {
                 if let url = user?.photoURL,
                     let data = try? Data(contentsOf: url),
@@ -116,8 +96,28 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 getAnswersKeys(myUid)
             }
         }
+        
+
+    }
+    func scrollToTop() {
+        if (self.tableView.numberOfSections > 0 ) {
+            let top = NSIndexPath(row: Foundation.NSNotFound, section: 0)
+            self.tableView.scrollToRow(at: top as IndexPath, at: .top, animated: true);
+        }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "tc05_tc04_segue", sender: indexPath)
+    }
+    override func viewDidLoad() {
+        tableView.estimatedRowHeight = 1000
+        tableView.rowHeight = UITableViewAutomaticDimension
+
+        super.viewDidLoad()
+        
+    }
+
     func getAnswersKeys(_ uid : String){
     let ref = FIRDatabase.database().reference().child("Users").child(uid)
         ref.observe(.value, with: { (FIRDataSnapshot) in
@@ -319,6 +319,15 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.toName = userName.text
             chatVC.profileImg = profileImg.image
             chatVC.profileFlag = true
+        }
+        
+        if segue.identifier == "tc05_tc04_segue" {
+            let contentVC = segue.destination as! Tc05ContentViewController
+            let idx = sender as! IndexPath
+            contentVC.writer_Uid = question[idx.row].writerUid
+            contentVC.writer_Name = question[idx.row].writerName
+            contentVC.content_Number = question[idx.row].contentNumber
+            contentVC.write_Time = question[idx.row].writeTime
         }
     }
 }

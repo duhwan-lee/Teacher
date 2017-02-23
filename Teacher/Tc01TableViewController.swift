@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Nuke
 class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, categoryDelegate, UISearchBarDelegate {
 
     @IBOutlet var mainView: UIView!
@@ -117,6 +118,8 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 if let ans = dictionary["answer"] as? [String: Any]{
                     qa.answerCount = Array(ans.keys).count
+                }else{
+                    qa.answerCount = 0
                 }
                 if let tag = dictionary["tag"] as? [String]{
                     let joiner = " "
@@ -182,16 +185,9 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
             cell.backgroundColor = UIColor.clear
-            self.queue.addOperation {
-                if let url = URL(string: self.question[indexPath.row].questionPic!),
-                    let data = try? Data(contentsOf: url),
-                    let image = UIImage(data:data) {
-                    OperationQueue.main.addOperation {
-                        cell.mainImageView.image = image
-                    }
-                }
-            }
-            
+            let imageURL = self.question[indexPath.row].questionPic!
+            let url = URL(string: imageURL)!
+            Nuke.loadImage(with: url, into: cell.mainImageView)
             if let num = question[indexPath.row].answerCount{
                 cell.answerCount.text = String(num)
             }

@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Nuke
 
 class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var chatChannel : String?
@@ -42,16 +43,9 @@ class Tc03ChatViewController: UIViewController, UITableViewDelegate, UITableView
                     self.chArr[indexPath.row].image = image
                     cell.chatName.text = name
                     
-                    self.queue.addOperation {
-                        if let url = URL(string: image!),
-                            let data = try? Data(contentsOf: url),
-                            let image = UIImage(data:data) {
-                            
-                            OperationQueue.main.addOperation {
-                                cell.pofileImg.image = image
-                            }
-                        }
-                    }
+                    let imageURL = image
+                    let url = URL(string: imageURL!)!
+                    Nuke.loadImage(with: url, into: cell.pofileImg)
                 
                     
                 }

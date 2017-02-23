@@ -17,4 +17,5 @@ target 'Teacher' do
  pod 'ActionSheetPicker-3.0'
  pod 'KMPlaceholderTextView', '~> 1.3.0'
  pod 'SwiftMessages'
+ pod 'Nuke', '~> 5.0'
 end

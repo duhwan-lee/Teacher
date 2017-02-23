@@ -46,7 +46,7 @@ class Tc10ImageViewController: UIViewController {
         }
         if let pinchView = gesture.view, gesture.state == .began || gesture.state == .changed
         {
-            var currentScale = (pinchView.layer.value(forKeyPath: "transform.scale") as AnyObject).floatValue
+            let currentScale = (pinchView.layer.value(forKeyPath: "transform.scale") as AnyObject).floatValue
             let kMaxScale:CGFloat = 2.0
             let kMinScale:CGFloat = 0.9
             

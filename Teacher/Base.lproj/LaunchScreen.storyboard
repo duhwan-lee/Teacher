@@ -8,11 +8,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="BMDOHYEON_otf.otf">
-            <string>BMDoHyeon-OTF</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -26,28 +21,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wag-zP-XsF">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="teacher-appsplash" translatesAutoresizingMaskIntoConstraints="NO" id="frf-Rg-ND3">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Teacher" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C5w-LB-8U4">
-                                        <rect key="frame" x="82" y="303" width="211" height="60"/>
-                                        <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="50"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.51372549019607838" green="0.3843137254901961" blue="0.76078431372549016" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="C5w-LB-8U4" firstAttribute="centerX" secondItem="wag-zP-XsF" secondAttribute="centerX" id="Abg-yb-RKq"/>
-                                    <constraint firstItem="C5w-LB-8U4" firstAttribute="centerY" secondItem="wag-zP-XsF" secondAttribute="centerY" id="WjM-FS-5KE"/>
-                                </constraints>
-                            </view>
+                            </imageView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="wag-zP-XsF" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Jkh-WL-3s1"/>
-                            <constraint firstItem="wag-zP-XsF" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Nft-HG-CG0"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="wag-zP-XsF" secondAttribute="bottom" id="kd8-ps-eSc"/>
-                            <constraint firstAttribute="trailing" secondItem="wag-zP-XsF" secondAttribute="trailing" id="tuS-Vu-f4M"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="frf-Rg-ND3" secondAttribute="bottom" id="9Cv-hc-jjo"/>
+                            <constraint firstItem="frf-Rg-ND3" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Bb6-8d-yQA"/>
+                            <constraint firstAttribute="trailing" secondItem="frf-Rg-ND3" secondAttribute="trailing" id="Lhv-6X-F71"/>
+                            <constraint firstItem="frf-Rg-ND3" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="fHK-Gq-M43"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -56,4 +38,7 @@
             <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="teacher-appsplash" width="750" height="1334"/>
+    </resources>
 </document>

@@ -29,7 +29,6 @@ class TcAuthViewController: UIViewController, GIDSignInUIDelegate , GIDSignInDel
         super.viewDidLoad()
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
-        // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
         

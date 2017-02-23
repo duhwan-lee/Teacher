@@ -74,6 +74,7 @@ PODS:
   - GTMSessionFetcher/Full (1.1.8):
     - GTMSessionFetcher/Core (= 1.1.8)
   - KMPlaceholderTextView (1.3.0)
+  - Nuke (5.0.1)
   - NVActivityIndicatorView (3.4)
   - SnapKit (3.1.2)
   - SwiftMessages (3.1.5)
@@ -89,6 +90,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - GoogleSignIn
   - KMPlaceholderTextView (~> 1.3.0)
+  - Nuke (~> 5.0)
   - SwiftMessages
   - TouchDraw (~> 2.0)
 
@@ -111,11 +113,12 @@ SPEC CHECKSUMS:
   GTMOAuth2: 7fc9c10f5c745f4d9850419ea88889fe3baa6b7d
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   KMPlaceholderTextView: 2bbcd19a273648a80a61e1e48f9743a24d8930e3
+  Nuke: d47030a761bdd0f7589a734a90819d71eda2500d
   NVActivityIndicatorView: 5754be63ceecd1df8af37d3c088d81872feeb8b8
   SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
   SwiftMessages: bb85d7c30e85256f9367214b0907e1f409e1870a
   TouchDraw: 7a95e5f5098e607957e4839d9e083ae029ce06c7
 
-PODFILE CHECKSUM: f909d93b33e7f792272bcc11082a223f5b3b65af
+PODFILE CHECKSUM: caf9fa5e3ef35938a5eb4be3a6aa6cca10791d76
 
 COCOAPODS: 1.2.0

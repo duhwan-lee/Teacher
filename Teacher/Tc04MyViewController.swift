@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Nuke
 
 class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -19,7 +20,7 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var profileImg: RoundedImageView!
     @IBOutlet weak var viewTop: NSLayoutConstraint!
-
+    var checkSegemented = true
     var anskeys = [String]()
     var modalFlag = false
     var queue = OperationQueue()
@@ -38,15 +39,18 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
         let control = sender as! UISegmentedControl
         switch control.selectedSegmentIndex {
         case 0:
+            checkSegemented = true
             question = question_qa
             tableView.reloadData()
             scrollToTop()
             
         case 1:
+            checkSegemented = false
             question = question_ans
             tableView.reloadData()
             scrollToTop()
         default:
+            checkSegemented = true
             question = question_qa
             tableView.reloadData()
             scrollToTop()
@@ -153,17 +157,16 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                                         qa.answerCount = Array(ans.keys).count
                                     }
                                     self.question_ans.append(qa)
+                                    if !self.checkSegemented {
+                                        self.question = self.question_ans
+                                        DispatchQueue.main.async(execute: {
+                                            self.tableView.reloadData()
+                                        })
+                                    }
                                     DispatchQueue.main.async(execute: {
                                         self.answerCount.text = String(self.question_ans.count)
                                     })
-
                                 }
-                                
-                                
-                                
-                                
-                                
-                                
                             }
                         }
                     })
@@ -195,15 +198,8 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 cell.writeTag.text = taglabel
             }
             cell.backgroundColor = UIColor.clear
-            self.queue.addOperation {
-                if let url = URL(string: self.question[indexPath.row].questionPic!),
-                    let data = try? Data(contentsOf: url),
-                    let image = UIImage(data:data) {
-                    OperationQueue.main.addOperation {
-                        cell.mainImageView.image = image
-                    }
-                }
-            }
+            let url = URL(string: self.question[indexPath.row].questionPic!)
+            Nuke.loadImage(with: url!, into: cell.mainImageView)
             
             if let num = question[indexPath.row].answerCount{
                 cell.answerCount.text = String(num)
@@ -316,9 +312,15 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 }
                 
                 self.question_qa.append(qa)
-                self.question.append(qa)
+                if self.checkSegemented {
+                  self.question = self.question_qa
+                    DispatchQueue.main.async(execute: {
+                        self.tableView.reloadData()
+                        self.questionCount.text = String(self.question_qa.count)
+                    })
+                }
+                //self.question.append(qa)
                 DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
                     self.questionCount.text = String(self.question_qa.count)
                 })
                 

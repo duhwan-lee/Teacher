@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Nuke
 class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,CollapsibleTableViewHeaderDelegate {
 
     @IBOutlet weak var tableview: UITableView!
@@ -86,21 +87,8 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
             user_ref.observe(.value, with: { (userSnapshot) in
                 if let userdic = userSnapshot.value as? [String : Any]{
                     let image = userdic["profileImg"] as? String
-                        self.queue.addOperation {
-                            if let url = URL(string: image!),
-                                let data = try? Data(contentsOf: url),
-                                let image = UIImage(data:data) {
-                                OperationQueue.main.addOperation {
-                                    self.writerPic.image = image
-                                }
-                            }
-                        }
-                    
-                    
-                    
-                    
-                    
-                }
+                    let url = URL(string: image!)!
+                    Nuke.loadImage(with: url, into: self.writerPic)}
             }, withCancel: nil)
             
         }
@@ -112,16 +100,11 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
                 self.qeustionText.text = dictionary["questionText"] as? String
                 
                 let pickStr = dictionary["questionPic"] as? String
-                self.queue.addOperation {
-                    if let url = URL(string: pickStr!),
-                        let data = try? Data(contentsOf: url),
-                        let image = UIImage(data:data) {
-                        OperationQueue.main.addOperation {
-                            self.questionPic.image = image
-                        }
-                    }else{
-                        self.cellHeight.constant = self.view.frame.height / 2
-                    }
+                if pickStr! != "null"{
+                let url = URL(string: pickStr!)
+                    Nuke.loadImage(with: url!, into: self.questionPic)
+                }else{
+                    self.cellHeight.constant = self.view.frame.height / 2
                 }
                 if let ans = dictionary["answer"] as? [String: Any]{
                     self.ansArr.removeAll()

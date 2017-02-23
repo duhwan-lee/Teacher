@@ -108,6 +108,7 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        AppUtility.lockOrientation(.portrait)
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
         indicator = IndicatorHelper(view: self.view)
         indicator?.start()
@@ -243,9 +244,6 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             return cell
 
         }
-        
-        
-        
         
     }
     

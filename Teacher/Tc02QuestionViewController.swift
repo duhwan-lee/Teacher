@@ -167,7 +167,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                 self.present(dialog, animated: true, completion: nil)
                 return
         }
-        let stringArr = textView.text.components(separatedBy: " ")
+        let stringArr = textView.text.replacingOccurrences(of: "\n", with: " ").components(separatedBy: " ")
         let hashArr = stringArr.filter { $0.contains("#")}
         print(hashArr)
         

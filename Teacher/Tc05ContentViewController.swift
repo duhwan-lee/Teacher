@@ -215,6 +215,7 @@ class Tc05ContentViewController: UIViewController, UITableViewDelegate, UITableV
             videoVC.question_num = content_Number
             videoVC.url = answers[idx].url
             videoVC.text = answers[idx].text
+            videoVC.writer = answers[idx].writer
         }
         
         if segue.identifier == "tc06photo_segue"{

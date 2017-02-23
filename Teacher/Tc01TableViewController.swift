@@ -22,6 +22,8 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     var queue = OperationQueue()
     var indicator : IndicatorHelper?
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.search.endEditing(true)
+
         if searchBar.text != nil{
             let searchText : String?
             if searchBar.text?.characters.first == "#"{
@@ -39,15 +41,22 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                 
             }
             question = question_search
+            question.reverse()
             let indexPath = IndexPath(row: 0, section: 0)
             tableView.reloadData()
-            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            if question.count > 0 {
+              tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            }
         }
         
+    }
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        return true
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty{
             question = question_all
+            question.reverse()
             tableView.reloadData()
         }
     }
@@ -56,35 +65,42 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     func categorySearch(cate : String){
         if cate == "전체" {
             self.question = self.question_all
+            self.question.reverse()
             DispatchQueue.main.async(execute: {
                 self.tableView.reloadData()
             })
         }else{
             self.question_temp.removeAll()
-            FIRDatabase.database().reference().child("Question").queryOrdered(byChild: "category").queryEqual(toValue: tc_category_dic[cate]!).observeSingleEvent(of: .childAdded, with: { (FIRDataSnapshot) in
+            
+            FIRDatabase.database().reference().child("Question").queryOrdered(byChild: "category").queryEqual(toValue: tc_category_dic[cate]!).observeSingleEvent(of: .value, with: { (FIRDataSnapshot) in
                 if let dictionary = FIRDataSnapshot.value as? [String : Any]{
-                    let qa = Question()
-                    qa.contentNumber = FIRDataSnapshot.key
-                    qa.questionText = dictionary["questionText"] as! String?
-                    qa.writerUid = dictionary["writerUid"] as! String?
-                    qa.writerName = dictionary["writerName"] as! String?
-                    qa.questionPic = dictionary["questionPic"] as! String?
-                    
-                    let seconds = dictionary["writeTime"] as! Int
-                    let timestampDate = NSDate(timeIntervalSince1970: TimeInterval(seconds))
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd a hh:mm:ss"
-                    qa.writeTime = dateFormatter.string(from: timestampDate as Date)
-                    if let ans = dictionary["answer"] as? [String: Any]{
-                        qa.answerCount = Array(ans.keys).count
+                    for dic_temp in dictionary{
+                        if let dic = dic_temp.value as? [String : Any]{
+                            let qa = Question()
+                            qa.contentNumber = dic_temp.key
+                            qa.questionText = dic["questionText"] as! String?
+                            qa.writerUid = dic["writerUid"] as! String?
+                            qa.writerName = dic["writerName"] as! String?
+                            qa.questionPic = dic["questionPic"] as! String?
+                            
+                            let seconds = dic["writeTime"] as! Int
+                            let timestampDate = NSDate(timeIntervalSince1970: TimeInterval(seconds))
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd a hh:mm:ss"
+                            qa.writeTime = dateFormatter.string(from: timestampDate as Date)
+                            
+                            
+                            if let ans = dic["answer"] as? [String: Any]{
+                                qa.answerCount = Array(ans.keys).count
+                            }
+                            self.question_temp.append(qa)
+                            self.question = self.question_temp
+                            self.question.reverse()
+                            DispatchQueue.main.async(execute: {
+                                self.tableView.reloadData()
+                            })
+                        }
                     }
-                    
-                    self.question_temp.append(qa)
-                        self.question = self.question_temp
-                        DispatchQueue.main.async(execute: {
-                            self.tableView.reloadData()
-                        })
-                    
                 }
             })
         }
@@ -92,7 +108,6 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
         indicator = IndicatorHelper(view: self.view)
         indicator?.start()
@@ -125,11 +140,14 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
                     let joiner = " "
                     qa.tagLabel = tag.joined(separator: joiner)
                     qa.tag = tag
+                }else{
+                    qa.tagLabel = ""
                 }
                 
                 self.question_all.append(qa)
                 if self.appdelegate.curCategory == "전체" {
                     self.question = self.question_all
+                    self.question.reverse()
                     DispatchQueue.main.async(execute: {
                         self.tableView.reloadData()
                         self.indicator?.stop()

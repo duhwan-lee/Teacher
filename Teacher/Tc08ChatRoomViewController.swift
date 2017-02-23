@@ -249,29 +249,10 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
                 let cell = tableView.dequeueReusableCell(withIdentifier: "Sender", for: indexPath) as! SenderCell
                 cell.clearCellData()
             if message[indexPath.row].type == "photo"{
-                if message[indexPath.row].image == nil {
-                    if let url = URL(string: message[indexPath.row].url!){
-                        queue.addOperation {
-                            do {
-                                let data = try Data(contentsOf: url)
-                                let image = UIImage(data: data)
-                                self.message[indexPath.row].image = image
-                                // show image on MainThread
-                                OperationQueue.main.addOperation {
-                                    cell.message.isHidden = true
-                                    tableView.reloadData()
-                                }
-                            }
-                            catch let error {
-                                print("Error : ", error.localizedDescription)
-                            }
-                        }
-                    }
-                    
-                }else{
-                    cell.messageBackground.image = message[indexPath.row].image!
-                    cell.message.isHidden = true
-                }
+                cell.messageBackground.image = #imageLiteral(resourceName: "img_not_available")
+                let url = URL(string: message[indexPath.row].url!)
+                Nuke.loadImage(with: url!, into: cell.messageBackground)
+                cell.message.isHidden = true
             }else{
                 cell.message.text = message[indexPath.row].text
             }

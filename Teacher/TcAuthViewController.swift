@@ -42,6 +42,13 @@ class TcAuthViewController: UIViewController, GIDSignInUIDelegate , GIDSignInDel
         let credential = FIRGoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!,
                                                                      accessToken: (authentication?.accessToken)!)
         FIRAuth.auth()?.signIn(with: credential) { (user, error) in
+            let uid = user!.uid as String
+            let ref = FIRDatabase.database().reference().child("Users").child(uid)
+            let name = user!.displayName! as String
+            
+            let url = String(describing: user!.photoURL!)
+            let value : Dictionary = ["name" : name, "profileImg":url]
+            ref.updateChildValues(value)
             if self.modalFlag {
                 self.dismiss(animated: true, completion: nil)
                 return

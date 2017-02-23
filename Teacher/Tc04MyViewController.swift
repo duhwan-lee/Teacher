@@ -87,15 +87,10 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
             let user = FIRAuth.auth()?.currentUser
             userName.text = user?.displayName
             
-            self.queue.addOperation {
-                if let url = user?.photoURL,
-                    let data = try? Data(contentsOf: url),
-                    let image = UIImage(data:data) {
-                    OperationQueue.main.addOperation {
-                        self.profileImg.image = image
-                    }
-                }
-            }
+            
+            if let url = user?.photoURL!{
+                Nuke.loadImage(with: url, into: self.profileImg)}
+            
             if let myUid = FIRAuth.auth()?.currentUser?.uid {
                 writeTextLoad(myUid)
                 getAnswersKeys(myUid)
@@ -159,6 +154,7 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                                     self.question_ans.append(qa)
                                     if !self.checkSegemented {
                                         self.question = self.question_ans
+                                        self.question.reverse()
                                         DispatchQueue.main.async(execute: {
                                             self.tableView.reloadData()
                                         })
@@ -230,7 +226,6 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 cell.answerCount.text = String(num)
             }
             
-            
             cell.shadowView.layer.shadowColor = UIColor.gray.cgColor
             cell.shadowView.layer.shadowOpacity = 8
             cell.shadowView.layer.shadowRadius = 3
@@ -265,15 +260,12 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 self.userName.text = name
                 let image = userdic["profileImg"] as? String
-                self.queue.addOperation {
-                    if let url = URL(string: image!),
-                        let data = try? Data(contentsOf: url),
-                        let image = UIImage(data:data) {
-                        OperationQueue.main.addOperation {
-                            self.profileImg.image = image
-                        }
+
+                    if let url = URL(string: image!){
+                        Nuke.loadImage(with: url, into: self.profileImg)
+                        
                     }
-                }
+                
                 
             }
         }, withCancel: nil)
@@ -313,13 +305,13 @@ class Tc04MyViewController: UIViewController, UITableViewDataSource, UITableView
                 
                 self.question_qa.append(qa)
                 if self.checkSegemented {
-                  self.question = self.question_qa
+                    self.question = self.question_qa
+                    self.question.reverse()
                     DispatchQueue.main.async(execute: {
                         self.tableView.reloadData()
                         self.questionCount.text = String(self.question_qa.count)
                     })
                 }
-                //self.question.append(qa)
                 DispatchQueue.main.async(execute: {
                     self.questionCount.text = String(self.question_qa.count)
                 })

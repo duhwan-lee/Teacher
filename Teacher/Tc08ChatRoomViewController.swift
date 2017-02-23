@@ -25,6 +25,7 @@ import UIKit
 import Photos
 import Firebase
 import CoreLocation
+import SwiftMessages
 
 class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,  UINavigationControllerDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate {
 
@@ -80,26 +81,18 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
             self.present(self.imagePicker, animated: true, completion: nil)
         }
     }
-    func checkLocationPermission() -> Bool {
-        var state = false
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedWhenInUse:
-            state = true
-        case .authorizedAlways:
-            state = true
-        default: break
-        }
-        return state
-    }
     
     @IBAction func selectLocation(_ sender: Any) {
-        self.canSendLocation = true
-        self.animateExtraButtons(toHide: true)
-        if self.checkLocationPermission() {
-            self.locationManager.startUpdatingLocation()
-        } else {
-            self.locationManager.requestWhenInUseAuthorization()
-        }
+        let warning = MessageView.viewFromNib(layout: .CardView)
+        warning.configureTheme(.warning)
+        warning.configureDropShadow()
+        
+        warning.configureContent(title: "알림", body: "죄송합니다. 현재 서비스 준비중입니다.", iconText: "🤔")
+        warning.button?.isHidden = true
+        var warningConfig = SwiftMessages.defaultConfig
+        warningConfig.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
+        SwiftMessages.show(config: warningConfig, view: warning)
+
     }
     
     @IBAction func showOptions(_ sender: Any) {
@@ -204,7 +197,6 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
 
     //MARK: Delegates
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(self.message.count)
         return self.message.count
     }
     

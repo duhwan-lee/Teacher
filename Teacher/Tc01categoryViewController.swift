@@ -40,6 +40,9 @@ class Tc01categoryViewController: UIViewController, UITableViewDelegate, UITable
             
         }
     }
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         lastCate = (UIApplication.shared.delegate as! AppDelegate).curCategory

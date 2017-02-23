@@ -11,9 +11,12 @@ import TouchDraw
 import ReplayKit
 import MobileCoreServices
 import Firebase
+import SwiftMessages
 
 class Tc07RecordViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CustomPalettViewDelegate, RPScreenRecorderDelegate,
 RPPreviewViewControllerDelegate {
+    let success = MessageView.viewFromNib(layout: .CardView)
+    var successConfig = SwiftMessages.defaultConfig
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var borderView: UIView!
@@ -80,8 +83,12 @@ RPPreviewViewControllerDelegate {
                 let ref = FIRDatabase.database().reference().child("Question").child(self.content_Number!).child("answer").childByAutoId()
                 let value = ["text" : self.textView.text, "type" : "text", "content" : "null", "writer" : self.writer, "time" : timestamp] as [String : Any]
                 ref.updateChildValues(value)
+                self.answerUserSet()
+
                 self.indicator?.stop()
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: {
+                    SwiftMessages.show(config: self.successConfig, view: self.success)
+                })
             })
             dialog.addAction(textAction)
         }else{
@@ -104,8 +111,11 @@ RPPreviewViewControllerDelegate {
                                 let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
                                 let value = ["text" : self.textView.text, "type" : "photo", "content" : downUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                                 ref.updateChildValues(value)
+                                self.answerUserSet()
                                 self.indicator?.stop()
-                                self.dismiss(animated: true, completion: nil)
+                                self.dismiss(animated: true, completion: {
+                                    SwiftMessages.show(config: self.successConfig, view: self.success)
+                                })
                             }
                             
                         }
@@ -181,7 +191,7 @@ RPPreviewViewControllerDelegate {
                         previewViewController: RPPreviewViewController?) {
         print("Screen recording finished")
     }
-    
+    //동영상 선택
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let videoUrl = info[UIImagePickerControllerMediaURL]{
             print("url", videoUrl)
@@ -204,8 +214,11 @@ RPPreviewViewControllerDelegate {
                         let ref = FIRDatabase.database().reference(fromURL: "https://teacher-d9168.firebaseio.com/").child("Question").child(self.content_Number!).child("answer").childByAutoId()
                             let value = ["text" : self.textView.text, "type" : "video", "content" : storageUrl, "writer" : self.writer, "time" : timestamp] as [String : Any]
                             ref.updateChildValues(value)
+                            self.answerUserSet()
                             self.indicator?.stop()
-                            self.dismiss(animated: true, completion: nil)
+                            self.dismiss(animated: true, completion: {
+                                SwiftMessages.show(config: self.successConfig, view: self.success)
+                            })
 
                         }
                     })
@@ -300,12 +313,6 @@ RPPreviewViewControllerDelegate {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         
-        //let imgDownAction = UIAlertAction(title: "질문 사진", style: .default) { (action) in
-        //서버에서 사진 가져오기
-        
-        //}
-        //dialog.addAction(cameraAction)
-        
         
         let albumAction = UIAlertAction(title: "앨범", style: .default) { (action) in
             imagePicker.sourceType = .photoLibrary //앨범에서 이미지 가져옴
@@ -379,8 +386,16 @@ RPPreviewViewControllerDelegate {
         makeCloseButton()
         undoButton.isEnabled = false
         clearButton.isEnabled = false
+        messageBarSet()
     }
-
+    func messageBarSet(){
+        success.configureTheme(.success)
+        success.configureDropShadow()
+        success.configureContent(title: "업로드 성공", body: "답변이 정상적으로 업로드 되었습니다.")
+        success.button?.isHidden = true
+        successConfig.presentationStyle = .top
+        successConfig.presentationContext = .window(windowLevel: UIWindowLevelNormal)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -426,7 +441,11 @@ RPPreviewViewControllerDelegate {
         UIGraphicsEndImageContext()
         return newImage!
     }
-
+    func answerUserSet(){
+        let ref = FIRDatabase.database().reference().child("Users").child(writer).child("answer").child(content_Number!)
+        let value = ["status" : true]
+        ref.updateChildValues(value)
+    }
 
 }
 

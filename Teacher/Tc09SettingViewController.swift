@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import SwiftMessages
 class Tc09SettingViewController: UITableViewController {
 
     
@@ -32,6 +33,18 @@ class Tc09SettingViewController: UITableViewController {
             
             self.present(dialog, animated: true, completion: nil)
         }
+        if indexPath == [1, 0]{
+            let warning = MessageView.viewFromNib(layout: .CardView)
+            warning.configureTheme(.warning)
+            warning.configureDropShadow()
+            
+            warning.configureContent(title: "푸시 알림", body: "죄송합니다. 현재 서비스 준비중입니다.", iconText: "🤔")
+            warning.button?.isHidden = true
+            var warningConfig = SwiftMessages.defaultConfig
+            warningConfig.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
+            SwiftMessages.show(config: warningConfig, view: warning)
+        }
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         if FIRAuth.auth()?.currentUser == nil {

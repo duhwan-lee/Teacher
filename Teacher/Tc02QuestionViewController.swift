@@ -10,6 +10,7 @@ import UIKit
 import TouchDraw
 import Firebase
 import ActionSheetPicker_3_0
+import SwiftMessages
 
 class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CustomPalettViewDelegate {
     
@@ -24,6 +25,9 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
     @IBOutlet weak var ImageContainView: UIView!
     @IBOutlet weak var drawView: TouchDrawView!
     let cateDic = ["고1 수학" : "tc_h1_m", "고2 수학" : "tc_h2_m", "고3 수학" : "tc_h3_m", "수능영어" :"tc_h_e"]
+    let success = MessageView.viewFromNib(layout: .CardView)
+    var successConfig = SwiftMessages.defaultConfig
+
     var cate : String?
     var cateName : String?
     var cateIdx : Int?
@@ -186,7 +190,9 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                 }
                 userReference.updateChildValues(value)
                 self.indicator?.stop()
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: { 
+                    SwiftMessages.show(config: self.successConfig, view: self.success)
+                })
             }
             dialog.addAction(cancelAction)
             dialog.addAction(okAction)
@@ -227,7 +233,9 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                                 }
                                 userReference.updateChildValues(value)
                                 self.indicator?.stop()
-                                self.dismiss(animated: true, completion: nil)
+                                self.dismiss(animated: true, completion: {
+                                    SwiftMessages.show(config: self.successConfig, view: self.success)
+                                })
                             }
                             
                         }
@@ -282,8 +290,17 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
         clearButton.isEnabled = false
         indicator = IndicatorHelper(view: self.view)
         
+        messageBarSet()
+        
     }
-    
+    func messageBarSet(){
+        success.configureTheme(.success)
+        success.configureDropShadow()
+        success.configureContent(title: "업로드 성공", body: "질문이 정상적으로 업로드 되었습니다.")
+        success.button?.isHidden = true
+        successConfig.presentationStyle = .top
+        successConfig.presentationContext = .window(windowLevel: UIWindowLevelNormal)
+    }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }

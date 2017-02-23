@@ -99,7 +99,6 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
         search.barTintColor = UIColor(red: 0.58, green: 0.46, blue: 0.80, alpha: 1)
         tableView.estimatedRowHeight = 1000
         tableView.rowHeight = UITableViewAutomaticDimension
-        
         FIRDatabase.database().reference().child("Question").observe(.childAdded, with: { (FIRDataSnapshot) in
             if let dictionary = FIRDataSnapshot.value as? [String : Any]{
                 let qa = Question()
@@ -137,7 +136,20 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             
         })
-        
+        FIRDatabase.database().reference().child("Question").observe(.childChanged, with: { (FIRDataSnapshot) in
+            if let content_name = FIRDataSnapshot.key as? String{
+                let dictionary = FIRDataSnapshot.value as? [String : Any]
+                for qa in self.question_all{
+                    if qa.contentNumber == content_name {
+                        if let ans = dictionary?["answer"] as? [String: Any]{
+                            qa.answerCount = Array(ans.keys).count
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+            }
+            
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,6 +172,7 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if question[indexPath.row].questionPic != "null" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "tc01_cell", for: indexPath) as! Tc01TableViewCell
+            
             cell.QuestionTextLabel.text = question[indexPath.row].questionText
             cell.writerName.text = question[indexPath.row].writerName
             cell.writeTime.text = question[indexPath.row].writeTime

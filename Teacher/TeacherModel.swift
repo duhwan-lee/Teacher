@@ -100,3 +100,6 @@ class IndicatorHelper{
         self.indicator.removeFromSuperview()
     }
 }
+
+
+

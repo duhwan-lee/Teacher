@@ -42,6 +42,8 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     var queue = OperationQueue()
     var indicator : IndicatorHelper?
     var firstFlag = true
+    var profileImgStr : String?
+    
     @IBOutlet weak var viewTop: NSLayoutConstraint!
     @IBOutlet var inputBar: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -124,6 +126,13 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
     
     //Downloads messages
     func fetchData() {
+        let user_ref = FIRDatabase.database().reference().child("Users").child(toUid!)
+        user_ref.observeSingleEvent(of: .value, with: { (FIRDataSnapshot_user) in
+            if let dic = FIRDataSnapshot_user.value as? [String : Any]{
+                self.profileImgStr = dic["profileImg"] as! String
+            }
+        })
+        
         if (FIRAuth.auth()?.currentUser?.uid) != nil {
             let ref = FIRDatabase.database().reference().child("message").child(channel!)
             ref.observe(.childAdded, with: { (FIRDataSnapshot) in
@@ -248,6 +257,10 @@ class Tc08ChatRoomViewController : UIViewController, UITableViewDelegate, UITabl
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "Sender", for: indexPath) as! SenderCell
                 cell.clearCellData()
+            if let urlStr = profileImgStr {
+                let url = URL(string : urlStr)
+                Nuke.loadImage(with: url!, into: cell.profilePic)
+            }
             if message[indexPath.row].type == "photo"{
                 cell.messageBackground.image = #imageLiteral(resourceName: "img_not_available")
                 let url = URL(string: message[indexPath.row].url!)

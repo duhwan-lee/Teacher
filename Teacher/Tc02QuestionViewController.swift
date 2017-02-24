@@ -168,7 +168,7 @@ class Tc02QuestionViewController: UIViewController, TouchDrawViewDelegate, UIIma
                 return
         }
         let stringArr = textView.text.replacingOccurrences(of: "\n", with: " ").components(separatedBy: " ")
-        let hashArr = stringArr.filter { $0.contains("#")}
+        let hashArr = stringArr.filter { $0.hasPrefix("#")}
         print(hashArr)
         
         let uid = (FIRAuth.auth()?.currentUser?.uid)! as String

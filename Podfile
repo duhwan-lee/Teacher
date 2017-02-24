@@ -18,4 +18,5 @@ target 'Teacher' do
  pod 'KMPlaceholderTextView', '~> 1.3.0'
  pod 'SwiftMessages'
  pod 'Nuke', '~> 5.0'
+ pod "TouchVisualizer", '~>2.0.1'
 end

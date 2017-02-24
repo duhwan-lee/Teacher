@@ -79,6 +79,7 @@ PODS:
   - SnapKit (3.1.2)
   - SwiftMessages (3.1.5)
   - TouchDraw (2.0.0)
+  - TouchVisualizer (2.0.1)
 
 DEPENDENCIES:
   - ActionSheetPicker-3.0
@@ -93,6 +94,7 @@ DEPENDENCIES:
   - Nuke (~> 5.0)
   - SwiftMessages
   - TouchDraw (~> 2.0)
+  - TouchVisualizer (~> 2.0.1)
 
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: d11a4c12c6aaf704b8a3f56d179198c99f3e41e6
@@ -118,7 +120,8 @@ SPEC CHECKSUMS:
   SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
   SwiftMessages: bb85d7c30e85256f9367214b0907e1f409e1870a
   TouchDraw: 7a95e5f5098e607957e4839d9e083ae029ce06c7
+  TouchVisualizer: d1bd1b438d084245332c222d9e14416c271c5f25
 
-PODFILE CHECKSUM: caf9fa5e3ef35938a5eb4be3a6aa6cca10791d76
+PODFILE CHECKSUM: 999fb90ef4b1559c6663241a48d9f006c8ddd595
 
 COCOAPODS: 1.2.0

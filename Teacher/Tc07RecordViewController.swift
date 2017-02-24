@@ -374,7 +374,7 @@ RPPreviewViewControllerDelegate {
         //videoUpload.isEnabled = false
         drawview.delegate = self
         recorder.delegate = self
-
+        self.title = "답변하기"
         drawview.setWidth(2.0)
         drawview.backgroundColor = UIColor(white: 1, alpha: 0.0)
         indicator = IndicatorHelper(view: self.view)

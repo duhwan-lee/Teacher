@@ -31,7 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        Visualizer.start()
+        //Touch Visiable
+        //Visualizer.start()
+        
         FIRApp.configure()
         
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID

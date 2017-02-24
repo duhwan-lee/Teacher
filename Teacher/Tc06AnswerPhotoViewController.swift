@@ -40,7 +40,7 @@ class Tc06AnswerPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        self.title = "답변보기"
         if type == "text"{
             imageHeight.constant = 0
         }else{

@@ -241,7 +241,7 @@ RPPreviewViewControllerDelegate {
                 dismiss(animated: true, completion: nil)
             }else{
                 let newimage = imageWithImage(sourceImage: image, scaledToWidth: self.ImagecontainView.frame.width / 2)
-                let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: ImagecontainView.frame.width / 2, height: newimage.size.height))
+                let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: (ImagecontainView.frame.width * 2) / 3, height: newimage.size.height))
                 imageview.image = newimage
                 ImagecontainView.addSubview(imageview)
                 dismiss(animated: true, completion: nil)

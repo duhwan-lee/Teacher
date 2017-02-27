@@ -50,6 +50,10 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        search.endEditing(true)
+    }
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
         return true
     }
@@ -60,7 +64,9 @@ class Tc01TableViewController: UIViewController, UITableViewDelegate, UITableVie
             tableView.reloadData()
         }
     }
-    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        search.endEditing(true)
+    }
     
     func categorySearch(cate : String){
         if cate == "전체" {
